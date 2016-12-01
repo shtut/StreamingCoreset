@@ -18,7 +18,6 @@ class Stream(object):
         self.last_leaf = []
         self.coreset_size = coreset_size
         self.stack = Stack()
-        self.coreset_size = coreset_size
 
     def _merge(self, pset1, pset2):
         return WeightedPointSet(
