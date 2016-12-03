@@ -104,8 +104,7 @@ class Stream(object):
             coreset = self.stack.pop().coreset
             if solution is None:
                 solution = coreset
-                solution = self._merge(solution, coreset)
             else:
-                pass
+                solution = self._merge(solution, coreset)
 
         return solution
