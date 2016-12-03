@@ -10,8 +10,20 @@ StackItem = namedtuple("StackItem", "coreset level")
 WeightedPointSet = namedtuple("WeightedPointSet", "points weights")
 
 
-class Stream(object):
+def _array_split(points, size):
+    start_index = 0
+    end_index = size
+    arr = []
+    while end_index <= len(points):
+        arr.append(points[start_index:end_index])
+        start_index += size
+        end_index += size
+    if start_index <= len(points):
+        arr.append(points[start_index:len(points)])
+    return arr;
 
+
+class Stream(object):
     def __init__(self, coreset_alg, leaf_size, coreset_size):
         self.coreset_alg = coreset_alg
         self.leaf_size = leaf_size
@@ -19,10 +31,17 @@ class Stream(object):
         self.coreset_size = coreset_size
         self.stack = Stack()
 
-    def _merge(self, pset1, pset2):
+    def _merge_old(self, pset1, pset2):
         return WeightedPointSet(
             np.vstack([pset1.points, pset2.points]),
             np.hstack([pset1.weights, pset2.weights]))
+
+    def _merge(self, pset1, pset2):
+        points = np.hstack([pset1.points, pset2.points])
+        w = np.hstack([pset1.weights, pset2.weights])
+        cset = self.coreset_alg(points, None, 10, 10)
+        coreset, weights = cset.sample(self.coreset_size)
+        return WeightedPointSet(coreset, weights)
 
     def _add_leaf(self, points):
         cset = self.coreset_alg(points, None, 10, 10)
@@ -54,7 +73,8 @@ class Stream(object):
         into several sets and a coreset is constructed on each set.
         """
 
-        for split in np.array_split(points, self.leaf_size):
+        # for split in np.array_split(points, self.leaf_size,):
+        for split in _array_split(points, self.leaf_size):
             if len(split) == self.leaf_size:
                 self._add_leaf(split)
             else:
@@ -84,7 +104,8 @@ class Stream(object):
             coreset = self.stack.pop().coreset
             if solution is None:
                 solution = coreset
-            else:
                 solution = self._merge(solution, coreset)
+            else:
+                pass
 
         return solution

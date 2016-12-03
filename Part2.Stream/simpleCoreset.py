@@ -7,4 +7,4 @@ class CoreSetHandler:
         return CoreSetHandler(p)
 
     def sample(self, coreSetSize):
-        return self._points[0:coreSetSize], [1,1,1,1,1,1,1,1,1,1]
+        return self._points[0:coreSetSize], None
