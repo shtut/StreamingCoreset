@@ -1,0 +1,149 @@
+DEBUG:root:Main server waiting for instructions...
+DEBUG:root:Waiting for client connection...
+DEBUG:root:Waiting for client connection...
+DEBUG:root:Main server waiting for instructions...
+DEBUG:root:Waiting for client connection...
+DEBUG:root:Main server waiting for instructions...
+DEBUG:root:Waiting for client connection...
+DEBUG:root:Main server waiting for instructions...
+DEBUG:root:Waiting for client connection...
+DEBUG:root:Main server waiting for instructions...
+DEBUG:root:Waiting for client connection...
+DEBUG:root:Main server waiting for instructions...
+DEBUG:root:Main server waiting for instructions...
+DEBUG:root:Waiting for client connection...
+DEBUG:root:Waiting for client connection...
+DEBUG:root:Main server waiting for instructions...
+DEBUG:root:Main server waiting for instructions...
+DEBUG:root:Waiting for client connection...
+DEBUG:root:Waiting for client connection...
+DEBUG:root:Main server waiting for instructions...
+DEBUG:root:Main server waiting for instructions...
+DEBUG:root:Received command 3 from client:
+DEBUG:root:Sent 2 points to worker <socket._socketobject object at 0x00000000035C4A08>
+DEBUG:root:Worker has received the points.
+DEBUG:root:Sent 2 points to worker <socket._socketobject object at 0x00000000035C4A08>
+DEBUG:root:Sent 2 points to worker <socket._socketobject object at 0x00000000035C4A08>
+DEBUG:root:Sent 2 points to worker <socket._socketobject object at 0x00000000035C4A08>
+DEBUG:root:Sent 2 points to worker <socket._socketobject object at 0x00000000035C4A08>
+DEBUG:root:Worker has received the points.
+DEBUG:root:Worker has received the points.
+DEBUG:root:Worker has received the points.
+DEBUG:root:Worker has received the points.
+DEBUG:root:Waiting for client connection...
+DEBUG:root:Main server waiting for instructions...
+DEBUG:root:Main server waiting for instructions...
+DEBUG:root:Received command 3 from client:
+DEBUG:root:Sent 2 points to worker <socket._socketobject object at 0x0000000003554A08>
+DEBUG:root:Worker has received the points.
+DEBUG:root:Sent 2 points to worker <socket._socketobject object at 0x0000000003554A08>
+DEBUG:root:Sent 2 points to worker <socket._socketobject object at 0x0000000003554A08>
+DEBUG:root:Sent 2 points to worker <socket._socketobject object at 0x0000000003554A08>
+DEBUG:root:Sent 2 points to worker <socket._socketobject object at 0x0000000003554A08>
+DEBUG:root:Received command 3 from client:
+DEBUG:root:Worker has received the points.
+DEBUG:root:Sent 2 points to worker <socket._socketobject object at 0x0000000003554A08>
+DEBUG:root:Worker has received the points.
+DEBUG:root:Sent 2 points to worker <socket._socketobject object at 0x0000000003554A08>
+DEBUG:root:Worker has received the points.
+DEBUG:root:Sent 2 points to worker <socket._socketobject object at 0x0000000003554A08>
+DEBUG:root:Worker has received the points.
+DEBUG:root:Sent 2 points to worker <socket._socketobject object at 0x0000000003554A08>
+DEBUG:root:Worker has received the points.
+DEBUG:root:Sent 2 points to worker <socket._socketobject object at 0x0000000003554A08>
+DEBUG:root:Received command 3 from client:
+DEBUG:root:Worker has received the points.
+DEBUG:root:Worker has received the points.
+DEBUG:root:Sent 2 points to worker <socket._socketobject object at 0x0000000003554A08>
+DEBUG:root:Sent 2 points to worker <socket._socketobject object at 0x0000000003554A08>
+DEBUG:root:Worker has received the points.
+DEBUG:root:Sent 2 points to worker <socket._socketobject object at 0x0000000003554A08>
+DEBUG:root:Worker has received the points.
+DEBUG:root:Sent 2 points to worker <socket._socketobject object at 0x0000000003554A08>
+DEBUG:root:Worker has received the points.
+DEBUG:root:Sent 2 points to worker <socket._socketobject object at 0x0000000003554A08>
+DEBUG:root:Received command 3 from client:
+DEBUG:root:Worker has received the points.
+DEBUG:root:Worker has received the points.
+DEBUG:root:Sent 2 points to worker <socket._socketobject object at 0x0000000003554A08>
+DEBUG:root:Sent 2 points to worker <socket._socketobject object at 0x0000000003554A08>
+DEBUG:root:Worker has received the points.
+DEBUG:root:Sent 2 points to worker <socket._socketobject object at 0x0000000003554A08>
+DEBUG:root:Worker has received the points.
+DEBUG:root:Sent 2 points to worker <socket._socketobject object at 0x0000000003554A08>
+DEBUG:root:Worker has received the points.
+DEBUG:root:Sent 2 points to worker <socket._socketobject object at 0x0000000003554A08>
+DEBUG:root:Received command 3 from client:
+DEBUG:root:Worker has received the points.
+DEBUG:root:Worker has received the points.
+DEBUG:root:Sent 2 points to worker <socket._socketobject object at 0x0000000003554A08>
+DEBUG:root:Worker has received the points.
+DEBUG:root:Sent 2 points to worker <socket._socketobject object at 0x0000000003554A08>
+DEBUG:root:Worker has received the points.
+DEBUG:root:Sent 2 points to worker <socket._socketobject object at 0x0000000003554A08>
+DEBUG:root:Sent 2 points to worker <socket._socketobject object at 0x0000000003554A08>
+DEBUG:root:Sent 2 points to worker <socket._socketobject object at 0x0000000003554A08>
+DEBUG:root:Received command 3 from client:
+DEBUG:root:Sent 2 points to worker <socket._socketobject object at 0x0000000003554A08>
+DEBUG:root:Sent 2 points to worker <socket._socketobject object at 0x0000000003554A08>
+DEBUG:root:Sent 2 points to worker <socket._socketobject object at 0x0000000003554A08>
+DEBUG:root:Sent 2 points to worker <socket._socketobject object at 0x0000000003554A08>
+DEBUG:root:Worker has received the points.
+DEBUG:root:Sent 2 points to worker <socket._socketobject object at 0x0000000003554A08>
+DEBUG:root:Received command 3 from client:
+DEBUG:root:Worker has received the points.
+DEBUG:root:Worker has received the points.
+DEBUG:root:Sent 2 points to worker <socket._socketobject object at 0x0000000003554A08>
+DEBUG:root:Sent 2 points to worker <socket._socketobject object at 0x0000000003554A08>
+DEBUG:root:Worker has received the points.
+DEBUG:root:Sent 2 points to worker <socket._socketobject object at 0x0000000003554A08>
+DEBUG:root:Worker has received the points.
+DEBUG:root:Sent 2 points to worker <socket._socketobject object at 0x0000000003554A08>
+DEBUG:root:Worker has received the points.
+DEBUG:root:Sent 2 points to worker <socket._socketobject object at 0x0000000003554A08>
+DEBUG:root:Received command 3 from client:
+DEBUG:root:Worker has received the points.
+DEBUG:root:Worker has received the points.
+DEBUG:root:Sent 2 points to worker <socket._socketobject object at 0x0000000003554A08>
+DEBUG:root:Worker has received the points.
+DEBUG:root:Sent 2 points to worker <socket._socketobject object at 0x0000000003554A08>
+DEBUG:root:Worker has received the points.
+DEBUG:root:Sent 2 points to worker <socket._socketobject object at 0x0000000003554A08>
+DEBUG:root:Worker has received the points.
+DEBUG:root:Sent 2 points to worker <socket._socketobject object at 0x0000000003554A08>
+DEBUG:root:Worker has received the points.
+DEBUG:root:Sent 2 points to worker <socket._socketobject object at 0x0000000003554A08>
+DEBUG:root:Received command 3 from client:
+DEBUG:root:Worker has received the points.
+DEBUG:root:Worker has received the points.
+DEBUG:root:Sent 2 points to worker <socket._socketobject object at 0x0000000003554A08>
+DEBUG:root:Sent 2 points to worker <socket._socketobject object at 0x0000000003554A08>
+DEBUG:root:Worker has received the points.
+DEBUG:root:Sent 2 points to worker <socket._socketobject object at 0x0000000003554A08>
+DEBUG:root:Worker has received the points.
+DEBUG:root:Sent 2 points to worker <socket._socketobject object at 0x0000000003554A08>
+DEBUG:root:Worker has received the points.
+DEBUG:root:Sent 2 points to worker <socket._socketobject object at 0x0000000003554A08>
+DEBUG:root:Worker has received the points.
+DEBUG:root:Received command 3 from client:
+DEBUG:root:Worker has received the points.
+DEBUG:root:Sent 2 points to worker <socket._socketobject object at 0x0000000003554A08>
+DEBUG:root:Worker has received the points.
+DEBUG:root:Sent 2 points to worker <socket._socketobject object at 0x0000000003554A08>
+DEBUG:root:Worker has received the points.
+DEBUG:root:Sent 2 points to worker <socket._socketobject object at 0x0000000003554A08>
+DEBUG:root:Sent 2 points to worker <socket._socketobject object at 0x0000000003554A08>
+DEBUG:root:Sent 2 points to worker <socket._socketobject object at 0x0000000003554A08>
+DEBUG:root:Received command 4 from client:
+DEBUG:root:Worker has received the points.
+DEBUG:root:Worker has received the points.
+DEBUG:root:Worker has received the points.
+DEBUG:root:Worker has received the points.
+DEBUG:root:Worker has received the points.
+DEBUG:root:Worker has received the points.
+DEBUG:root:Worker has received the points.
+DEBUG:root:Worker has received the points.
+DEBUG:root:Worker has received the points.
+DEBUG:root:Worker is sending points as requested.
+DEBUG:root:Collected all parts, sending to client...
+DEBUG:root:Waiting for client connection...
