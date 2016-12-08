@@ -1,9 +1,10 @@
 import simpleCoreset
 from stack import Stack
-from stream import Stream
+from CoresetTreeBuilder import CoresetTreeBuilder
+import  numpy as np
 
-s = Stream(simpleCoreset.CoreSetHandler.coreset_alg, 4, 4)
-s.add_points(range(1, 17))
+s = CoresetTreeBuilder(simpleCoreset.CoreSetHandler.coreset_alg, 20, 4)
+s.add_points(np.random.rand(1000,100))
 res = s.get_unified_coreset()
 print "####################################################"
 print res.points

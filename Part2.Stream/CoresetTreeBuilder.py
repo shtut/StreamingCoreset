@@ -23,7 +23,7 @@ def _array_split(points, size):
     return arr;
 
 
-class Stream(object):
+class CoresetTreeBuilder(object):
     def __init__(self, coreset_alg, leaf_size, coreset_size):
         self.coreset_alg = coreset_alg
         self.leaf_size = leaf_size
@@ -107,4 +107,4 @@ class Stream(object):
             else:
                 solution = self._merge(solution, coreset)
 
-        return solution
+        return solution.points
