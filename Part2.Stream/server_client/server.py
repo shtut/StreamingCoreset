@@ -189,7 +189,7 @@ class Server:
 
 #Start the server.
 try:
-    server = Server("localhost")
+    server = Server(sys.argv[1])
     server.main()
 except KeyboardInterrupt:
     print "caught SIGINT, dying."
