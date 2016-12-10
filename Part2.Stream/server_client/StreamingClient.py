@@ -39,5 +39,5 @@ class Client:
 
         print "Received the summary: %s" % data
 
-client = Client()
-client.test()
+# client = Client()
+# client.test()

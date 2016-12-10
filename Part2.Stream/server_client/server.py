@@ -57,9 +57,11 @@ class Server:
         a new thread is spawned and it handles the future communication with the
         worker while this main thread continues accepting workers.
         """
+
         incomming = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         server_name = self._server_name
         server_address = (server_name, 10000)
+        incomming.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, True)
         incomming.bind(server_address)
         incomming.listen(1)
 
@@ -119,6 +121,7 @@ class Server:
         incomming = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         server_name = self._server_name
         server_address = (server_name, 10001)
+        incomming.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, True)
         incomming.bind(server_address)
         incomming.listen(1)
 
@@ -187,13 +190,14 @@ class Server:
         sock.sendall(serialized)
         del self._received_points[:]
 
-#Start the server.
-try:
-    server = Server(sys.argv[1])
-    server.main()
-except KeyboardInterrupt:
-    print "caught SIGINT, dying."
-    exit
-except AttributeError as e:
-    print e
-    exit
+
+# # Start the server.
+# try:
+#     server = Server(sys.argv[1])
+#     server.main()
+# except KeyboardInterrupt:
+#     print "caught SIGINT, dying."
+#     exit()
+# except AttributeError as e:
+#     print e
+#     exit()

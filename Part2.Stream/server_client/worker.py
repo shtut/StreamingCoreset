@@ -26,8 +26,15 @@ class Worker:
         """
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         server_address = ('localhost', 10000)
-        sock.connect(server_address)
-        sock.sendall(bytes(codes.REGISTER_WORKER))
+        try:
+            sock.connect(server_address)
+        except socket.error as msg:
+            sys.stderr.write("[ERROR] %s\n" % msg[1])
+            sys.exit()
+        try:
+            sock.sendall(bytes(codes.REGISTER_WORKER))
+        except socket.error:
+            sys.exit()
 
         command = int(sock.recv(1, 0))
         if command != codes.CONTINUE:
@@ -66,5 +73,5 @@ class Worker:
         print "Summary sent to the server. Going back to the loop."
 
 
-worker = Worker()
-worker.register_and_handle()
+# worker = Worker()
+# worker.register_and_handle()
