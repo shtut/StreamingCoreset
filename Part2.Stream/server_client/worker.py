@@ -64,7 +64,6 @@ class Worker:
     def get_summary(self,sock):
         summary = self._coresetTreeBuilder.get_unified_coreset()
         log.debug("Sending the summary to the server %s" % summary)
-        time.sleep(5)
         serialized = pickle.dumps(summary)
         size = "%10d" % (len(serialized))
         sock.send(bytes(codes.SENDING))
