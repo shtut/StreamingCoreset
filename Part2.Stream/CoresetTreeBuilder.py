@@ -33,7 +33,7 @@ class CoresetTreeBuilder(object):
     def _merge(self, pset1, pset2):
         points = np.hstack([pset1.points, pset2.points])
         weights = np.hstack([pset1.weights, pset2.weights])
-        return _activate_coreset_alg(points, weights)
+        return self._activate_coreset_alg(points, weights)
         
     def _activate_coreset_alg(self, points, weights):
         cset = self.coreset_alg(points, weights, 10, 10)
@@ -41,7 +41,7 @@ class CoresetTreeBuilder(object):
         return WeightedPointSet(coreset, coresetWeights)
 
     def _add_leaf(self, points):
-        self._insert_into_tree(WeightedPointSet(coreset, None))
+        self._insert_into_tree(WeightedPointSet(points, None))
 
     def _can_merge(self, level):
         if self.stack.is_empty():
