@@ -15,7 +15,7 @@ log.basicConfig(filename='worker.log', level=log.DEBUG)
 class Worker:
 
     def __init__(self):
-        self._coresetTreeBuilder = CoresetTreeBuilder(CoreSetHandler.coreset_alg, 10, 10)
+        self._coresetTreeBuilder = CoresetTreeBuilder(CoreSetHandler.coreset_alg, 10)
 
     def register_and_handle(self):
         """Registers with the server and enters the send/receive loop.

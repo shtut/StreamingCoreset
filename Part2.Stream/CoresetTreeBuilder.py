@@ -24,43 +24,38 @@ def _array_split(points, size):
 
 
 class CoresetTreeBuilder(object):
-    def __init__(self, coreset_alg, leaf_size, coreset_size):
+    def __init__(self, coreset_alg, coreset_size):
         self.coreset_alg = coreset_alg
-        self.leaf_size = leaf_size
         self.last_leaf = []
         self.coreset_size = coreset_size
         self.stack = Stack()
 
-    def _merge_old(self, pset1, pset2):
-        return WeightedPointSet(
-            np.vstack([pset1.points, pset2.points]),
-            np.hstack([pset1.weights, pset2.weights]))
-
     def _merge(self, pset1, pset2):
         points = np.hstack([pset1.points, pset2.points])
-        w = np.hstack([pset1.weights, pset2.weights])
-        cset = self.coreset_alg(points, None, 10, 10)
-        coreset, weights = cset.sample(self.coreset_size)
-        return WeightedPointSet(coreset, weights)
+        weights = np.hstack([pset1.weights, pset2.weights])
+        return _activate_coreset_alg(points, weights)
+        
+    def _activate_coreset_alg(self, points, weights):
+        cset = self.coreset_alg(points, weights, 10, 10)
+        coreset, coresetWeights = cset.sample(self.coreset_size)
+        return WeightedPointSet(coreset, coresetWeights)
 
     def _add_leaf(self, points):
-        cset = self.coreset_alg(points, None, 10, 10)
-        coreset, weights = cset.sample(self.coreset_size)
-        self._insert_into_tree(WeightedPointSet(coreset, weights))
+        self._insert_into_tree(WeightedPointSet(coreset, None))
 
-    def _is_correct_level(self, level):
+    def _can_merge(self, level):
         if self.stack.is_empty():
-            return True
-        elif self.stack.top().level > level:
-            return True
-        elif self.stack.top().level == level:
             return False
+        elif self.stack.top().level > level:
+            return False
+        elif self.stack.top().level == level:
+            return True
         else:
             raise Exception("New level should be smaller")
 
     def _insert_into_tree(self, coreset):
         level = 1
-        while not self._is_correct_level(level):
+        while self._can_merge(level):
             last = self.stack.pop()
             coreset = self._merge(last.coreset, coreset)
             level += 1
@@ -69,21 +64,20 @@ class CoresetTreeBuilder(object):
     def add_points(self, points):
         """Add a set of points to the stream.
 
-        If the set is larger than leaf_size, it is split
+        If the set is larger than corset_size, it is split
         into several sets and a coreset is constructed on each set.
         """
-
-        # for split in np.array_split(points, self.leaf_size,):
-        for split in _array_split(points, self.leaf_size):
-            if len(split) == self.leaf_size:
+        
+        for split in _array_split(points, self.corset_size):
+            if len(split) == self.corset_size:
                 self._add_leaf(split)
             else:
                 # Not enough points, check whether the last leaf
                 # and these points are enough to construct a coreset.
                 if len(self.last_leaf) == 0:
                     self.last_leaf = points
-                elif len(self.last_leaf) + len(points) >= self.leaf_size:
-                    need = self.leaf_size - len(self.last_leaf)
+                elif len(self.last_leaf) + len(points) >= self.corset_size:
+                    need = self.corset_size - len(self.last_leaf)
                     self._add_leaf(np.vstack([self.last_leaf, points[:need]]))
                     self.last_leaf = points[need:]
 
