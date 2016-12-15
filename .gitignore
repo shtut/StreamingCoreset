@@ -1,0 +1,6 @@
+*.pyc
+Part2.Stream/server.log
+*.csv
+*.log
+*.pyc
+Part2.Stream/server_client/codes.pyc
