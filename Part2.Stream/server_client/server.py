@@ -7,6 +7,7 @@ import pickle
 from Queue import PriorityQueue
 import numpy as np
 import logging as log
+import streamUtils as utils
 
 log.basicConfig(filename='server.log', level=log.DEBUG)
 
@@ -160,7 +161,8 @@ class Server:
         sock.send(bytes(codes.ACCEPTED))
         data = pickle.loads(data)
 
-        for split in np.array_split(data, self.CHUNK_SIZE):
+
+        for split in utils._array_split(data, self.CHUNK_SIZE):
             self.send_to_worker(split)
 
     def get_summary_from_workers(self, sock, client_address):

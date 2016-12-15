@@ -5,22 +5,12 @@ Online coresets.
 from collections import namedtuple
 import numpy as np
 from stack import Stack
+import streamUtils as utils
 
 StackItem = namedtuple("StackItem", "coreset level")
 WeightedPointSet = namedtuple("WeightedPointSet", "points weights")
 
 
-def _array_split(points, size):
-    start_index = 0
-    end_index = size
-    arr = []
-    while end_index <= len(points):
-        arr.append(points[start_index:end_index])
-        start_index += size
-        end_index += size
-    if start_index <= len(points):
-        arr.append(points[start_index:len(points)])
-    return arr;
 
 
 class CoresetTreeBuilder(object):
@@ -64,22 +54,31 @@ class CoresetTreeBuilder(object):
     def add_points(self, points):
         """Add a set of points to the stream.
 
-        If the set is larger than corset_size, it is split
+        If the set is larger than coreset_size, it is split
         into several sets and a coreset is constructed on each set.
         """
+        if points.size == 0:
+            return
         
-        for split in _array_split(points, self.corset_size):
-            if len(split) == self.corset_size:
+        for split in utils._array_split(points, self.coreset_size):
+            if len(split) == self.coreset_size:
                 self._add_leaf(split)
             else:
+                if len(split) == 0:
+                    return
+                # self.last_leaf = np.concatenate([self.last_leaf, split], axis=0)
+                self.last_leaf.extend(split)
+                # print "###########################"
+                # print "last leaf"
+                # print self.last_leaf
+                # print "###########################"
                 # Not enough points, check whether the last leaf
                 # and these points are enough to construct a coreset.
-                if len(self.last_leaf) == 0:
-                    self.last_leaf = points
-                elif len(self.last_leaf) + len(points) >= self.corset_size:
-                    need = self.corset_size - len(self.last_leaf)
-                    self._add_leaf(np.vstack([self.last_leaf, points[:need]]))
-                    self.last_leaf = points[need:]
+                # if len(self.last_leaf) == 0:
+                #     self.last_leaf = points
+                if len(self.last_leaf) >= self.coreset_size:
+                    self._add_leaf(self.last_leaf[:self.coreset_size])
+                    self.last_leaf = self.last_leaf[self.coreset_size:]
 
     def get_unified_coreset(self):
         solution = None

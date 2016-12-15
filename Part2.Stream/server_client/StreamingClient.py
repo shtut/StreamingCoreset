@@ -13,8 +13,13 @@ class Client:
         server_address = ('localhost', 10001)
         sock.connect(server_address)
 
-        for i in xrange(12):
-            data = pickle.dumps(np.arange(i*10,(i+1)*10))
+        send_size = 2000
+        for i in xrange(15):
+            data = pickle.dumps(np.arange(i * 2, (i + 1) * 2))
+            # num_of_samples = 2
+            # num_of_channels = 3
+            # A = np.random.rand(num_of_samples, num_of_channels)
+            # data = pickle.dumps(A)
             size = "%010d" % (len(data))
             sock.send(bytes(codes.ADDPOINTS))
             sock.send(bytes(size))
