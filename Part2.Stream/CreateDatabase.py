@@ -1,28 +1,61 @@
 import csv
-import random
-import string
-import os
+import pandas as pd
+import scipy.sparse as sps
+
 
 class createDB:
+    """
+    This class purpose is to manipulate database in CSV format
+    The constructor generates 2 sparse matrices and zip between them
+    """
+    def __init__(self, rows, cols):
+        """
+        The constructor generates 2 sparse matrices and zip between them
+        :param rows: given number of rows
+        :param cols: given number of columns
+        """
+        a = sps.rand(rows, cols, density=0.10, format='csr')
+        a.data[:] = 1
+        a = a.toarray()
+        b = sps.random(rows, cols, density=0.25, format='csr')
+        b.data[:] = 1
+        b = b.toarray()
+        c = []
+        for elem in zip(a, b):
+            c.extend(elem)
+        self._db = c
 
-    def __init__(self):
-        g = open("1.csv", "wb")
-        w = csv.writer(g)
-        w.writerow(('id', 'name', 'address', 'college', 'company', 'dob', 'age'))
-        for i in xrange(100000000):
-            w.writerow((i + 1,
-                        self.fake_name(random.choice(range(1, 10))),
-                        self.fake_address(random.choice(range(5, 10))),
-                        random.choice(['psg', 'sona', 'amirta', 'anna university']),
-                        random.choice(['CTS', 'INFY', 'HTC']),
-                        (random.randrange(1970, 2018, 1), random.randrange(1, 13, 1), random.randrange(1, 31, 1)),
-                        random.choice(range(0, 100))))
+    @property
+    def db(self):
+        """
+        The generated data base
+        :return: returns the DB
+        """
+        return self._db
 
-    def fake_name(self, str_size):
-        return ''.join(random.choice(string.ascii_letters) for _ in range(str_size))
+    @staticmethod
+    def write_matrix_to_csv(file_name, array):
+        """
+        The purpose of this method is to write a given array into CSV file
+        :param file_name: given file name to write into
+        :param array: the written array
+        """
+        with open(file_name, 'wb') as file:
+            writer = csv.writer(file)
+            for row in array:
+                writer.writerow(row)
 
-    def fake_address(self, str_size):
-        return ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(str_size))
+    @staticmethod
+    def read_from_csv(file_name):
+        """
+        The purpose of this method is to read from a given file and create an array from it
+        :param file_name: given file name to read from
+        :return: the loaded array
+        """
+        df = pd.read_csv(file_name, sep=',', header=None)
+        return df.values
 
 
-createDB()
+# c = createDB(1000000, 10)
+# createDB.write_matrix_to_csv('1.csv', c.db)
+a = createDB.read_from_csv('1.csv')

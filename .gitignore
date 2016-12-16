@@ -4,3 +4,6 @@ Part2.Stream/server.log
 *.log
 *.pyc
 Part2.Stream/server_client/codes.pyc
+*.xml
+Part2.Stream/.idea/workspace.xml
+*.log
