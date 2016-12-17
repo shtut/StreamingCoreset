@@ -3,6 +3,7 @@ import pickle
 import socket
 import time
 import sys
+import adiel
 sys.path.insert(0, "../")
 
 import codes
@@ -15,7 +16,8 @@ log.basicConfig(filename='worker.log', level=log.DEBUG)
 class Worker:
 
     def __init__(self):
-        self._coresetTreeBuilder = CoresetTreeBuilder(CoreSetHandler.coreset_alg, 4)
+        # self._coresetTreeBuilder = CoresetTreeBuilder(adiel.LineKMeans.coreset_alg, 50)
+        self._coresetTreeBuilder = CoresetTreeBuilder(CoreSetHandler.coreset_alg, 20)
 
     def register_and_handle(self):
         """Registers with the server and enters the send/receive loop.

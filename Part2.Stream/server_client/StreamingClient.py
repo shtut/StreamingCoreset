@@ -14,12 +14,12 @@ class Client:
         sock.connect(server_address)
 
         send_size = 2000
-        for i in xrange(15):
-            data = pickle.dumps(np.arange(i * 2, (i + 1) * 2))
-            # num_of_samples = 2
-            # num_of_channels = 3
-            # A = np.random.rand(num_of_samples, num_of_channels)
-            # data = pickle.dumps(A)
+        num_of_samples = 24
+        num_of_channels = 3
+        for i in xrange(1):
+            #data = pickle.dumps(np.arange(i * 2, (i + 1) * 2))
+            A = np.random.rand(num_of_samples, num_of_channels)
+            data = pickle.dumps(A)
             size = "%010d" % (len(data))
             sock.send(bytes(codes.ADDPOINTS))
             sock.send(bytes(size))
@@ -42,7 +42,7 @@ class Client:
         data = sock.recv(length, 0)
         data = pickle.loads(data)
 
-        print "Received the summary: %s" % data
+        print "Received the summary:\n %s" % data
 
 # client = Client()
 # client.test()

@@ -13,7 +13,7 @@ log.basicConfig(filename='server.log', level=log.DEBUG)
 
 
 class Server:
-    CHUNK_SIZE = 10
+    CHUNK_SIZE = 12
 
     def __init__(self, server_name):
         self._server_name = server_name
