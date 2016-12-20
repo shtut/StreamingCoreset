@@ -18,6 +18,7 @@ class Server:
     def __init__(self, server_name):
         self._server_name = server_name
         self._registered_workers = []
+        self._summary_worker = None
         self._current_load = PriorityQueue()
         self._received_points = []
         self._handler = {
@@ -25,7 +26,7 @@ class Server:
             codes.GETUNIFIED: self.get_summary_from_workers
         }
 
-    def send_to_worker(self, data):
+    def send_to_worker(self, data, summary=False):
         """Sends points to the registered workers.
 
         The workers are chosen according to the current load which is
@@ -36,10 +37,20 @@ class Server:
         3. We send the points.
         All data sent over the channel is byte-serialized.
         """
+
+        #
         if len(self._registered_workers) == 0:
             raise Exception("No workers available.")
+
         else:
-            load, connection = self._current_load.get()
+            if(summary):
+                if len(self._summary_worker) == None:
+                    raise Exception("No summary worker.")
+
+                load, connection = self._summary_worker
+            else:
+                load, connection = self._current_load.get()
+                print '***', (load, connection)
             serialized = pickle.dumps(data)
             size = "%010d" % (len(serialized))
             connection.send(bytes(codes.ADDPOINTS))
@@ -71,9 +82,8 @@ class Server:
             log.debug("Main server waiting for instructions...")
             connection, client_address = incomming.accept()
             while True:
-                command = int(connection.recv(1, 0))
+                command = int(connection.recv(10, 0))
                 if command == codes.REGISTER_WORKER:
-                    print "Registering worker: ", (connection, client_address)
                     self._registered_workers.append((connection, client_address))
                     self._current_load.put((0, connection))
 
@@ -81,6 +91,18 @@ class Server:
                     t = Thread(target=self.worker_thread, args=(connection,))
                     threads_to_kill.append(t)
                     t.start()
+                    print "Registering worker: ", (connection, client_address)
+                    break
+                elif command == codes.REGISTER_SUMMARY_WORKER:
+                    #self._summary_worker = (connection, client_address)
+                    self._summary_worker = (0, connection)
+                    print self._summary_worker
+
+                    # Spawn a new thread to handle the worker communication.
+                    t = Thread(target=self.worker_thread, args=(connection,))
+                    threads_to_kill.append(t)
+                    t.start()
+                    print "Registering summary worker: ", (connection, client_address)
                     break
                 else:
                     log.error("Command not recognized: %s" % command)
@@ -92,7 +114,7 @@ class Server:
     def worker_thread(self, sock):
         sock.send(bytes(codes.CONTINUE))
         while True:
-            command = sock.recv(1, 0)
+            command = sock.recv(10, 0)
             if command == '':
                 log.error("Worker has died.")
                 break
@@ -130,7 +152,7 @@ class Server:
             log.debug("Waiting for client connection...")
             connection, client_address = incomming.accept()
             while True:
-                command = connection.recv(1, 0)
+                command = connection.recv(10, 0)
                 if len(command) == 0:
                     break
                 command = int(command)
@@ -186,6 +208,18 @@ class Server:
 
         log.debug("Collected all parts, sending to client...")
         points = np.vstack(self._received_points)
+
+        # print "%%%%%%%%%%%%%% points (pre-summary)" , points
+        # # sending all 'final results' to summary worker
+        # self.send_to_worker(points,True)
+        # socket = self._summary_worker[1]    #get the socket from worker tuple
+        # socket.send(bytes(codes.GETUNIFIED))
+        # if (len(self._received_points) > 0):
+        #     summary_points = np.vstack(self._received_points)
+        # # serialize the summary and sent back to the client
+        # print "%%%%%%%%%%%%%% post summary", summary_points
+
+
         serialized = pickle.dumps(points)
         size = "%010d" % (len(serialized))
         sock.sendall(bytes(size))
