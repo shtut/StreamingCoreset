@@ -44,13 +44,12 @@ class Server:
 
         else:
             if(summary):
-                if len(self._summary_worker) == None:
+                if self._summary_worker == None:
                     raise Exception("No summary worker.")
 
                 load, connection = self._summary_worker
             else:
                 load, connection = self._current_load.get()
-                print '***', (load, connection)
             serialized = pickle.dumps(data)
             size = "%010d" % (len(serialized))
             connection.send(bytes(codes.ADDPOINTS))
@@ -82,7 +81,7 @@ class Server:
             log.debug("Main server waiting for instructions...")
             connection, client_address = incomming.accept()
             while True:
-                command = int(connection.recv(10, 0))
+                command = int(connection.recv(2, 0))
                 if command == codes.REGISTER_WORKER:
                     self._registered_workers.append((connection, client_address))
                     self._current_load.put((0, connection))
@@ -96,7 +95,6 @@ class Server:
                 elif command == codes.REGISTER_SUMMARY_WORKER:
                     #self._summary_worker = (connection, client_address)
                     self._summary_worker = (0, connection)
-                    print self._summary_worker
 
                     # Spawn a new thread to handle the worker communication.
                     t = Thread(target=self.worker_thread, args=(connection,))
@@ -114,7 +112,7 @@ class Server:
     def worker_thread(self, sock):
         sock.send(bytes(codes.CONTINUE))
         while True:
-            command = sock.recv(10, 0)
+            command = sock.recv(1, 0)
             if command == '':
                 log.error("Worker has died.")
                 break
@@ -152,13 +150,13 @@ class Server:
             log.debug("Waiting for client connection...")
             connection, client_address = incomming.accept()
             while True:
-                command = connection.recv(10, 0)
+                command = connection.recv(1, 0)
                 if len(command) == 0:
                     break
                 command = int(command)
-                log.debug("Received command %s from client:" % command)
+                log.debug("Received command {0} from client:" .format(command))
                 if command not in self._handler:
-                    log.error("Command not recognized: " % command)
+                    log.error("Command not recognized: " , command)
                 else:
                     self._handler[command](connection, client_address)
             connection.close()
@@ -182,7 +180,6 @@ class Server:
         data = sock.recv(length, 0)
         sock.send(bytes(codes.ACCEPTED))
         data = pickle.loads(data)
-
 
         for split in utils._array_split(data, self.CHUNK_SIZE):
             self.send_to_worker(split)
@@ -209,18 +206,22 @@ class Server:
         log.debug("Collected all parts, sending to client...")
         points = np.vstack(self._received_points)
 
-        # print "%%%%%%%%%%%%%% points (pre-summary)" , points
-        # # sending all 'final results' to summary worker
-        # self.send_to_worker(points,True)
-        # socket = self._summary_worker[1]    #get the socket from worker tuple
-        # socket.send(bytes(codes.GETUNIFIED))
-        # if (len(self._received_points) > 0):
-        #     summary_points = np.vstack(self._received_points)
-        # # serialize the summary and sent back to the client
-        # print "%%%%%%%%%%%%%% post summary", summary_points
+        # clearing received data cache
+        self._received_points = []
+        # sending all 'final results' to summary worker
+        self.send_to_worker(points,True)
+        socket = self._summary_worker[1]    #get the socket from worker tuple
+        socket.send(bytes(codes.GETUNIFIED))
+
+        #wait for summary points
+        while (len(self._received_points) < 1):
+            time.sleep(1)
+
+        summary_points = np.vstack(self._received_points)
+        # serialize the summary and sent back to the client
 
 
-        serialized = pickle.dumps(points)
+        serialized = pickle.dumps(summary_points)
         size = "%010d" % (len(serialized))
         sock.sendall(bytes(size))
         sock.sendall(serialized)

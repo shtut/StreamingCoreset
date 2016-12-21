@@ -16,10 +16,11 @@ class Client:
         send_size = 2000
         num_of_samples = 24
         num_of_channels = 3
-        for i in xrange(1):
-            #data = pickle.dumps(np.arange(i * 2, (i + 1) * 2))
+        for i in xrange(10):
+            # data = pickle.dumps(np.arange(i * 2, (i + 1) * 2))
             A = np.random.rand(num_of_samples, num_of_channels)
             data = pickle.dumps(A)
+
             size = "%010d" % (len(data))
             sock.send(bytes(codes.ADDPOINTS))
             sock.send(bytes(size))

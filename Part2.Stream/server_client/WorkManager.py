@@ -48,7 +48,7 @@ def kill_process(process_name):
 
 
 try:
-    manager = WorkManager(2)
+    manager = WorkManager(10)
     manager.main()
     time.sleep(3*manager.number_of_workers)
     kill_process("python.exe")
