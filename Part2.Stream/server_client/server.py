@@ -1,6 +1,7 @@
 import time
 import socket
 import sys
+sys.path.insert(0, "../")
 import codes
 from threading import Thread
 import pickle
@@ -13,7 +14,7 @@ log.basicConfig(filename='server.log', level=log.DEBUG)
 
 
 class Server:
-    CHUNK_SIZE = 12
+    CHUNK_SIZE = 100
 
     def __init__(self, server_name):
         self._server_name = server_name
@@ -82,6 +83,7 @@ class Server:
             connection, client_address = incomming.accept()
             while True:
                 command = int(connection.recv(2, 0))
+                print "Server : got command"
                 if command == codes.REGISTER_WORKER:
                     self._registered_workers.append((connection, client_address))
                     self._current_load.put((0, connection))
@@ -228,9 +230,9 @@ class Server:
         del self._received_points[:]
 
 
-# # Start the server.
+# Start the server.
 # try:
-#     server = Server(sys.argv[1])
+#     server = Server('localhost')
 #     server.main()
 # except KeyboardInterrupt:
 #     print "caught SIGINT, dying."

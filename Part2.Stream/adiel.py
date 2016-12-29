@@ -49,6 +49,7 @@ def find_centers(X, weigths, K):
 def k_means_users(A, size_of_coreset):
     num_of_samples = A.shape[0]
     num_of_channels = A.shape[1]
+
     weights = np.ones((num_of_samples, 1))
     weights[:,0] = np.sqrt(np.sum(np.power(A, 2), 1))
     normalization=np.dot(weights,np.ones((1,A.shape[1])))
@@ -61,9 +62,9 @@ def k_means_users(A, size_of_coreset):
     weights_s = np.zeros((len(centroids1), 1))
 
     for h1 in range(1, K):
-
-        sizes[h1-1] = sum(bestmukey==h1-1) #I want here to count how many membersare in cluster h1.
-        weights_s[h1-1] = (sum(np.power(weights[np.where(bestmukey==h1-1)],2)))
+        if (h1-1) < len(sizes):
+            sizes[h1-1] = sum(bestmukey==h1-1) #I want here to count how many membersare in cluster h1.
+            weights_s[h1-1] = (sum(np.power(weights[np.where(bestmukey==h1-1)],2)))
     wei_sizes=np.dot(np.sqrt(weights_s),np.ones((1, num_of_channels)))
 
     SA=np.multiply(wei_sizes,centroids1)
@@ -79,27 +80,27 @@ class LineKMeans:
         return LineKMeans(p, w)
 
     def sample(self, coreset_size):
-        if(len(self._points) > coreset_size):
-            result = k_means_users(A, coreset_size)
+        if len(self._points) > coreset_size:
+            result = k_means_users(self._points, coreset_size)
         else:
-            result = self._pointss
+            result = self._points
         return result, np.ones((coreset_size, 1))
 
 
 #MAIN
 
 
-third_meas=1
-num_of_samples=10
-num_of_channels=3
-A = np.random.rand(num_of_samples,num_of_channels) #the original data
-size_of_coreset=2
-SA=k_means_users(A, size_of_coreset)
-At=np.transpose(A)
-AtA=np.dot(At,A)
-SAt=np.transpose(SA)
-SAtSA=np.dot(SAt,SA)
-print(np.linalg.norm(SAtSA-AtA,2)/np.linalg.norm(AtA,2)) #calculating the error
+# third_meas=1
+# num_of_samples=20
+# num_of_channels=5
+# A = np.random.rand(num_of_samples,num_of_channels) #the original data
+# size_of_coreset=10
+# SA=k_means_users(A, size_of_coreset)
+# At=np.transpose(A)
+# AtA=np.dot(At,A)
+# SAt=np.transpose(SA)
+# SAtSA=np.dot(SAt,SA)
+# print(np.linalg.norm(SAtSA-AtA,2)/np.linalg.norm(AtA,2)) #calculating the error
 
 
 

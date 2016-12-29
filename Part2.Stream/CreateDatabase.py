@@ -1,5 +1,6 @@
 import csv
-import pandas as pd
+
+import numpy as np
 import scipy.sparse as sps
 
 
@@ -83,15 +84,26 @@ class createDB:
         :param file_name: given file name to read from
         """
         reader = csv.reader(open(file_name, 'rb'))
-        chunk = []
+        # chunk = np.array([])
+        chunk = None
         for i, line in enumerate(reader):
             if i % chunksize == 0 and i > 0:
                 self._processChunkMethod(chunk)
-                del chunk[:]
-            chunk.append(line)
+                # del chunk[:]
+                chunk = None
+                return
+            if chunk is None:
+                l = []
+                for v in line:
+                    l.append(float(v))
+                chunk = np.asanyarray(l)
+            else:
+                chunk = np.vstack([chunk, np.asanyarray(line)])
+        if chunk is not None:
+            self._processChunkMethod(chunk)
 
 
-c = createDB(process_chunk)
-c.create_matrix(1000000, 10)
-c.write_matrix_to_csv('1.csv', c.db)
-c.read_from_csv('1.csv', 100)
+# c = createDB(process_chunk)
+# c.create_matrix(300000, 10)
+# c.write_matrix_to_csv('3.csv', c.db)
+# c.read_from_csv('1.csv', 500)

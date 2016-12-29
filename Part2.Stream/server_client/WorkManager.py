@@ -24,20 +24,21 @@ class WorkManager:
         server = Server("localhost")
         Thread(target=server.main).start()
         time.sleep(1)
-        #start workers
+        # start workers
         for i in xrange(self.number_of_workers):
             worker = Worker()
             Thread(target=worker.register_and_handle).start()
             time.sleep(1)
 
-        #start the summary worker
+        # start the summary worker
         summaryWorker = Worker()
         Thread(target=summaryWorker.register_and_handle_summary).start()
         time.sleep(1)
 
         # call client
         client = Client()
-        Thread(target=client.test).start()
+        # t = Thread(target=client.run_client)
+        client.run_client()
 
 
 def kill_process(process_name):
@@ -48,9 +49,9 @@ def kill_process(process_name):
 
 
 try:
-    manager = WorkManager(10)
+    manager = WorkManager(1)
     manager.main()
-    time.sleep(3*manager.number_of_workers)
+    # time.sleep(3 * manager.number_of_workers)
     kill_process("python.exe")
     sys.exit()
 

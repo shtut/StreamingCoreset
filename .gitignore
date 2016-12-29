@@ -7,3 +7,7 @@ Part2.Stream/server_client/codes.pyc
 *.xml
 Part2.Stream/.idea/workspace.xml
 *.log
+*.xml
+*.iml
+Part2.Stream/.idea/misc.xml
+*.iml

@@ -1,14 +1,14 @@
 import logging as log
 import pickle
 import socket
-import time
 import sys
-import adiel
+import numpy as np
+
+from simpleCoreset import CoreSetHandler
 
 sys.path.insert(0, "../")
-
+import adiel
 import codes
-from simpleCoreset import CoreSetHandler
 from CoresetTreeBuilder import CoresetTreeBuilder
 
 log.basicConfig(filename='worker.log', level=log.DEBUG)
@@ -16,8 +16,8 @@ log.basicConfig(filename='worker.log', level=log.DEBUG)
 
 class Worker:
     def __init__(self):
-        self._coresetTreeBuilder = CoresetTreeBuilder(adiel.LineKMeans.coreset_alg, 5)
-        # self._coresetTreeBuilder = CoresetTreeBuilder(CoreSetHandler.coreset_alg, 5)
+        self._coresetTreeBuilder = CoresetTreeBuilder(adiel.LineKMeans.coreset_alg, 10)
+        # self._coresetTreeBuilder = CoresetTreeBuilder(CoreSetHandler.coreset_alg, 50)
 
     def register_and_handle_internal(self, is_summary=False):
         """Registers with the server and enters the send/receive loop.
@@ -69,8 +69,21 @@ class Worker:
         data = sock.recv(length, 0)
         sock.send(bytes(codes.ACCEPTED))
         a = pickle.loads(data)
-        self._coresetTreeBuilder.add_points(a)
+        b = self.convert_points_to_float(a)
+        self._coresetTreeBuilder.add_points(b)
         print "Got a new matrix", a.shape
+
+    def convert_points_to_float(self, a):
+        b = None
+        for line in a:
+            nl = []
+            for v in line:
+                nl.append(float(v)+0.4)
+            if b is None:
+                b = nl
+            else:
+                b = np.vstack([b, np.asanyarray(nl)])
+        return b
 
     def get_summary(self, sock):
         summary = self._coresetTreeBuilder.get_unified_coreset()
