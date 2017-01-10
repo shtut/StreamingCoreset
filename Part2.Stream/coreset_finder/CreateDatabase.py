@@ -91,7 +91,6 @@ class createDB:
                 self._processChunkMethod(chunk)
                 # del chunk[:]
                 chunk = None
-                return
             if chunk is None:
                 l = []
                 for v in line:
@@ -104,6 +103,6 @@ class createDB:
 
 
 # c = createDB(process_chunk)
-# c.create_matrix(300000, 10)
-# c.write_matrix_to_csv('3.csv', c.db)
+# c.create_matrix(5000, 5)
+# c.write_matrix_to_csv('2.csv', c.db)
 # c.read_from_csv('1.csv', 500)

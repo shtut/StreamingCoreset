@@ -1,10 +1,12 @@
-from worker import Worker
-from server import Server
-from threading import Thread
-from StreamingClient import Client
-import time
 import sys
+import time
+from threading import Thread
 import psutil
+from StreamingClient import Client
+from coreset_finder.SummaryWorker import SummaryWorker
+
+from coreset_finder.server import Server
+from worker import Worker
 
 
 class WorkManager:
@@ -21,24 +23,34 @@ class WorkManager:
 
     def main(self):
         # start server
-        server = Server("localhost")
-        Thread(target=server.main).start()
+        self._run_server()
         time.sleep(1)
-        # start workers
+        self._start_workers()
+        self._start_summary_worker()
+        self._run_client()
+
+    @staticmethod
+    def _run_server():
+        server = Server("localhost")
+        t = Thread(target=server.main)
+        t.start()
+
+    @staticmethod
+    def _run_client():
+        client = Client()
+        client.run_client()
+
+    @staticmethod
+    def _start_summary_worker():
+        summary_worker = SummaryWorker()
+        Thread(target=summary_worker.register_and_handle).start()
+        time.sleep(1)
+
+    def _start_workers(self):
         for i in xrange(self.number_of_workers):
             worker = Worker()
             Thread(target=worker.register_and_handle).start()
             time.sleep(1)
-
-        # start the summary worker
-        summaryWorker = Worker()
-        Thread(target=summaryWorker.register_and_handle_summary).start()
-        time.sleep(1)
-
-        # call client
-        client = Client()
-        # t = Thread(target=client.run_client)
-        client.run_client()
 
 
 def kill_process(process_name):
@@ -49,7 +61,7 @@ def kill_process(process_name):
 
 
 try:
-    manager = WorkManager(1)
+    manager = WorkManager(2)
     manager.main()
     # time.sleep(3 * manager.number_of_workers)
     kill_process("python.exe")
