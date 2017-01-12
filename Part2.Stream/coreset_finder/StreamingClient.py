@@ -1,6 +1,6 @@
 import socket
 import message_codes as codes
-import numpy as np
+import array_util
 import pickle
 import connection_data as conn
 import time
@@ -57,10 +57,7 @@ class Client:
     def _process_chunk(self, chunk):
 
         print "read from csv chunk in size of: ", len(chunk)
-        num_of_samples = chunk.shape[0]
-        num_of_channels = chunk.shape[1]
-        chunk = np.random.rand(num_of_samples, num_of_channels)
-        self._send_points(chunk)
+        self._send_points(array_util.convert_points_to_float(chunk))
 
     def _send_points(self, chunk):
         conn_util.send_points(chunk, self._socket)

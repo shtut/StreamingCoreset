@@ -44,11 +44,11 @@ class Worker(object):
             server_socket.close()
             return -1
 
-        self._handel_commands(server_socket)
+        self._handle_commands(server_socket)
 
         server_socket.close()
 
-    def _handel_commands(self, server_socket):
+    def _handle_commands(self, server_socket):
         """
         handles the communication codes received from the server
         :param server_socket: server socket

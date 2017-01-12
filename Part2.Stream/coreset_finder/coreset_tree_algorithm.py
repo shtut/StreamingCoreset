@@ -104,7 +104,7 @@ class CoresetTeeAlgorithm(object):
         :param current_data:  current data
         :return: none
         """
-        print "Total items in tree", len(current_data)
+        print "Total items in tree: %d" % (len(current_data))
         print "Tree: %s" % current_data
 
     def _merge_solution(self, data, solution):

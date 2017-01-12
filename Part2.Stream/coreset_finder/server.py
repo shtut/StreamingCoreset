@@ -156,10 +156,10 @@ class Server(object):
 
         log.debug("Waiting for client connection...")
         connection, client_address = incoming.accept()
-        self._handel_client_commands(connection)
+        self._handle_client_commands(connection)
         connection.close()
 
-    def _handel_client_commands(self, connection):
+    def _handle_client_commands(self, connection):
         while True:
             command = self.receive_command(connection)
             log.debug("Received command {0} from client:".format(command))
@@ -202,6 +202,12 @@ class Server(object):
         self._obtain_workers_results()
 
         log.debug("Collected all parts, sending to client...")
+        # remove leftover received from workers
+        temp = self._received_points[:]
+        for points_list in temp:
+            if points_list is None:
+                self._received_points.remove(points_list)
+
         points = np.vstack(self._received_points)
 
         # clearing received data cache
