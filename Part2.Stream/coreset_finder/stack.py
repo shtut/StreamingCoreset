@@ -2,6 +2,9 @@ import copy
 
 
 class Stack:
+    """
+    utility class implementing a stack
+    """
     def __init__(self):
         self._items = []
 

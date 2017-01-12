@@ -1,4 +1,8 @@
 class SimpleCoreset:
+    """
+    contains a simple coreset algorithm - return only the first part of the data,  in coreset size (first p points)
+    used for testing
+    """
     def __init__(self, p):
         self._points = p
 

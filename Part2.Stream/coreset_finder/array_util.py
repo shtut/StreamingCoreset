@@ -2,6 +2,12 @@ import numpy as np
 
 
 def array_split(points, size):
+    """
+
+    :param points:
+    :param size:
+    :return:
+    """
     start_index = 0
     end_index = size
     arr = []
@@ -15,6 +21,11 @@ def array_split(points, size):
 
 
 def convert_points_to_float(matrix):
+    """
+    converts a given matrix to float
+    :param matrix: a matrix
+    :return: float matrix
+    """
     res = None
     for line in matrix:
         new_line = []

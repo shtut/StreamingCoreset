@@ -1,3 +1,4 @@
+#codes used in the communication between the server/client and server/workers
 REGISTER_WORKER = 1
 ACCEPTED = 2
 ADD_POINTS = 3

@@ -22,6 +22,10 @@ class Client:
         self._socket = None
 
     def run_client(self):
+        """
+        starts the client. creates a database and sends it to the server,  then asks for the summary (coreset)
+        :return:
+        """
         self._connect_server()
         db = createDB(self._process_chunk)
         db.read_from_csv('2.csv', 100)
@@ -29,6 +33,10 @@ class Client:
         self.get_summary_points()
 
     def get_summary_points(self):
+        """
+            requests and handles the summary (coreset) from the server
+        :return:
+        """
         print "Getting the summary..."
         self._socket.send(bytes(codes.GET_UNIFIED))
         msg = self._socket.recv(10, 0)
@@ -38,11 +46,16 @@ class Client:
         print "Received the summary:\n %s" % data
 
     def _connect_server(self):
+        """
+        connects to the server
+        :return:
+        """
         self._socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         server_address = ('localhost', conn.client_port)
         self._socket.connect(server_address)
 
     def _process_chunk(self, chunk):
+
         print "read from csv chunk in size of: ", len(chunk)
         num_of_samples = chunk.shape[0]
         num_of_channels = chunk.shape[1]

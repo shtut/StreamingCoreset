@@ -25,12 +25,14 @@ class Worker(object):
         self._init_number(number)
 
     def register_and_handle(self):
-        """Registers with the server and enters the send/receive loop.
+        """
+        Registers with the server and enters the send/receive loop.
 
-                Connects to the server and tries to register. If successfully it
-                starts waiting for commands, otherwise it stops and reports an
-                error.
-                """
+        Connects to the server and tries to register. If successfully it
+        starts waiting for commands, otherwise it stops and reports an
+        error.
+        :return: -1 if fails
+        """
         server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         server_address = (conn.server_ip, conn.worker_port)
         self._connect_server(server_address, server_socket)
@@ -47,6 +49,11 @@ class Worker(object):
         server_socket.close()
 
     def _handel_commands(self, server_socket):
+        """
+        handles the communication codes received from the server
+        :param server_socket: server socket
+        :return: none
+        """
         while True:
             command = int(server_socket.recv(1, 0))
             log.debug("Received command %s" % command)
@@ -61,6 +68,11 @@ class Worker(object):
         return codes.REGISTER_WORKER
 
     def _register_to_server(self, server_socket):
+        """
+        registers the worker to the server
+        :param server_socket: server socket
+        :return: none
+        """
         try:
             server_socket.sendall(bytes(self._worker_code()))
         except socket.error:
@@ -68,6 +80,12 @@ class Worker(object):
 
     @staticmethod
     def _connect_server(server_address, server_socket):
+        """
+        attempts to connect to the server
+        :param server_address: server address
+        :param server_socket: server socket
+        :return:
+        """
         try:
             server_socket.connect(server_address)
         except socket.error as msg:
@@ -83,6 +101,11 @@ class Worker(object):
         print "Got a new matrix", data.shape
 
     def _get_summary(self, sock):
+        """
+        returns the current tree coreset to the server
+        :param sock: server socket
+        :return: none
+        """
         summary = self._coresetTreeBuilder.get_unified_coreset()
         log.debug("Sending the summary to the server %s" % summary)
         serialized = pickle.dumps(summary)

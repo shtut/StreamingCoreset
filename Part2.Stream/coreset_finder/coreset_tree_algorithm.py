@@ -12,17 +12,26 @@ WeightedPointSet = namedtuple("WeightedPointSet", "points weights")
 
 
 class CoresetTeeAlgorithm(object):
+
     def __init__(self, coreset_alg, coreset_size):
+        """
+        constructor
+        :param coreset_alg: the provided algorithm to computer the coreset
+        :param coreset_size: the required size of the coreset (and nodes)
+        """
         self._coreset_alg = coreset_alg
         self._last_leaf = []
         self._coreset_size = coreset_size
         self._data = Stack()
 
     def add_points(self, points):
-        """Add a set of points to the stream.
+        """
+        Adds a set of points to the stream.
 
         If the set is larger than coreset_size, it is split
         into several sets and a coreset is constructed on each set.
+        :param points: input data
+        :return: none
         """
         if points.size == 0:
             return
@@ -33,6 +42,10 @@ class CoresetTeeAlgorithm(object):
                 self._add_leftovers(split)
 
     def get_unified_coreset(self):
+        """
+        merges the tree and returns the unified coreset (root)
+        :return:
+        """
         current_data = self._data.list()
         res = None
         solution = None
@@ -86,10 +99,16 @@ class CoresetTeeAlgorithm(object):
 
     @staticmethod
     def _print_tree_data(current_data):
+        """
+        prints the tree data
+        :param current_data:  current data
+        :return: none
+        """
         print "Total items in tree", len(current_data)
         print "Tree: %s" % current_data
 
     def _merge_solution(self, data, solution):
+
         for node in data:
             coreset = node.coreset
             if solution is None:

@@ -25,6 +25,10 @@ class Server(object):
         self._received_points = []
 
     def main(self):
+        """
+        initializes the server-  makes the server prepared to register the workers and the client
+        after registration listens to incoming commands and performs accordingly
+        """
         client_handler = self._start_handlers()
         print "Server is UP"
         client_handler.join()
@@ -225,14 +229,14 @@ class Server(object):
 
     def _obtain_workers_results(self):
         self._request_workers_results()
-        self.wait_for_workers_results()
+        self._wait_for_workers_results()
 
     def _request_workers_results(self):
         for worker in self._registered_workers:
             worker_socket = worker[0]
             worker_socket.send(bytes(codes.GET_UNIFIED))
 
-    def wait_for_workers_results(self):
+    def _wait_for_workers_results(self):
         need = len(self._registered_workers)
         self._wait_for_results(need)
 
