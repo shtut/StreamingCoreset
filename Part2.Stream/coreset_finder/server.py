@@ -182,7 +182,6 @@ class Server(object):
         # clearing received data cache
         self._received_points = []
         # sending all 'final results' to summary worker
-        self._send_to_worker(points)
         self._send_data_to_worker(points, self._summary_worker)
         self._summary_worker.send_message(Message(codes.GET_UNIFIED))
 
