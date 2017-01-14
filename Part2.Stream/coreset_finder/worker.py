@@ -1,14 +1,14 @@
 import logging as log
-import pickle
 import random as rand
 import socket
 import sys
-from coreset_tree_algorithm import CoresetTeeAlgorithm
-
 import array_util as util
 import connection_data as conn
 import message_codes as codes
+from connection import Connection
+from coreset_finder.message import Message
 from coreset_finder.simpleCoreset import SimpleCoreset
+from coreset_tree_algorithm import CoresetTeeAlgorithm
 
 log.basicConfig(filename='worker.log', level=log.DEBUG)
 MAX_RANDOM_NUMBER = 2000
@@ -33,86 +33,68 @@ class Worker(object):
         error.
         :return: -1 if fails
         """
-        server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        server_address = (conn.server_ip, conn.worker_port)
-        self._connect_server(server_address, server_socket)
-        self._register_to_server(server_socket)
 
-        command = int(server_socket.recv(1, 0))
+        server_connection = Connection()
+        server_connection.connect(conn.server_ip, conn.worker_port)
+
+        self._register_to_server(server_connection)
+
+        message = server_connection.receive_message()
+        command = message.code
         if command != codes.CONTINUE:
             log.error("Server sent %s, but expected codes.CONTINUE!" % command)
-            server_socket.close()
+            server_connection.close()
             return -1
 
-        self._handle_commands(server_socket)
+        self._handle_commands(server_connection)
 
-        server_socket.close()
+        server_connection.close()
 
-    def _handle_commands(self, server_socket):
+    def _handle_commands(self, server_connection):
         """
         handles the communication codes received from the server
-        :param server_socket: server socket
+        :param server_connection: server connection
         :return: none
         """
         while True:
-            command = int(server_socket.recv(1, 0))
+            message = server_connection.receive_message()
+            command = message.code
             log.debug("Received command %s" % command)
             if command == codes.ADD_POINTS:
-                self._new_points(server_socket)
+                self._new_points(message.points)
             elif command == codes.GET_UNIFIED:
-                self._get_summary(server_socket)
+                self._get_summary(server_connection)
             elif command == codes.TERMINATE:
                 break
 
     def _worker_code(self):
         return codes.REGISTER_WORKER
 
-    def _register_to_server(self, server_socket):
+    def _register_to_server(self, server_connection):
         """
         registers the worker to the server
-        :param server_socket: server socket
+        :param server_connection: server connection
         :return: none
         """
         try:
-            server_socket.sendall(bytes(self._worker_code()))
+            server_connection.send_message(Message(self._worker_code()))
         except socket.error:
             sys.exit()
 
-    @staticmethod
-    def _connect_server(server_address, server_socket):
-        """
-        attempts to connect to the server
-        :param server_address: server address
-        :param server_socket: server socket
-        :return:
-        """
-        try:
-            server_socket.connect(server_address)
-        except socket.error as msg:
-            sys.stderr.write("[ERROR] %s\n" % msg[1])
-            sys.exit()
-
-    def _new_points(self, sock):
-        length = int(sock.recv(10, 0))
-        data = sock.recv(length, 0)
-        sock.send(bytes(codes.ACCEPTED))
-        data = util.convert_points_to_float(pickle.loads(data))
+    def _new_points(self, points):
+        data = util.convert_points_to_float(points)
         self._coresetTreeBuilder.add_points(data)
         print "Got a new matrix", data.shape
 
-    def _get_summary(self, sock):
+    def _get_summary(self, server_connection):
         """
         returns the current tree coreset to the server
-        :param sock: server socket
+        :param server_connection: server connection
         :return: none
         """
         summary = self._coresetTreeBuilder.get_unified_coreset()
         log.debug("Sending the summary to the server %s" % summary)
-        serialized = pickle.dumps(summary)
-        size = "%10d" % (len(serialized))
-        sock.send(bytes(codes.SENDING))
-        sock.send(bytes(size))
-        sock.send(serialized)
+        server_connection.send_message(Message(codes.SENDING, summary))
         print "Summary sent to the server. Going back to the loop."
 
     def _init_number(self, number):

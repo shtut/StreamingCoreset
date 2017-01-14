@@ -1,15 +1,14 @@
-import socket
-import message_codes as codes
-import array_util
-import pickle
-import connection_data as conn
 import time
+import array_util
+import connection_data as conn
+import message_codes as codes
 from CreateDatabase import createDB
-import connection_util as conn_util
+from connection import Connection
+from message import Message
 
 
 def _print_server_response_code(code):
-    if len(code) == 0:
+    if code == codes.TERMINATE:
         print "Problem, server died"
     elif int(code) == codes.ACCEPTED:
         print "Points sent successfully!"
@@ -19,7 +18,7 @@ def _print_server_response_code(code):
 
 class Client:
     def __init__(self):
-        self._socket = None
+        self._connection = Connection()
 
     def run_client(self):
         """
@@ -38,11 +37,9 @@ class Client:
         :return:
         """
         print "Getting the summary..."
-        self._socket.send(bytes(codes.GET_UNIFIED))
-        msg = self._socket.recv(10, 0)
-        length = int(msg)
-        data = self._socket.recv(length, 0)
-        data = pickle.loads(data)
+        self._connection.send_message(Message(codes.GET_UNIFIED))
+        message = self._connection.receive_message()
+        data = message.points
         print "Received the summary:\n %s" % data
 
     def _connect_server(self):
@@ -50,19 +47,16 @@ class Client:
         connects to the server
         :return:
         """
-        self._socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        server_address = ('localhost', conn.client_port)
-        self._socket.connect(server_address)
+        self._connection.connect(conn.server_ip, conn.client_port)
 
     def _process_chunk(self, chunk):
-
         print "read from csv chunk in size of: ", len(chunk)
         self._send_points(array_util.convert_points_to_float(chunk))
 
     def _send_points(self, chunk):
-        conn_util.send_points(chunk, self._socket)
+        self._connection.send_message(Message(codes.ADD_POINTS, chunk))
         self._get_server_response()
 
     def _get_server_response(self):
-        code = self._socket.recv(1, 0)
-        _print_server_response_code(code)
+        message = self._connection.receive_message()
+        _print_server_response_code(message.code)

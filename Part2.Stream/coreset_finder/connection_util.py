@@ -1,7 +1,5 @@
 import pickle
 
-from gevent._socket2 import socket
-
 import message_codes as codes
 
 
@@ -28,6 +26,20 @@ def send_results(result, client_socket):
     """
     serialized, size = _serialize_data(result)
     _send_data(client_socket, serialized, size)
+
+
+def receive_command(connection):
+    command_string = connection.recv(1, 0)
+    if command_string == '':
+        command_string = codes.TERMINATE
+    return int(command_string)
+
+
+def receive_add_points(connection):
+    length = int(connection.recv(10, 0))
+    data = connection.recv(length, 0)
+    connection.send(bytes(codes.ACCEPTED))
+    return pickle.loads(data)
 
 
 def _serialize_data(points):
