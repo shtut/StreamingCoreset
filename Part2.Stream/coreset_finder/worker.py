@@ -6,8 +6,8 @@ import array_util as util
 import connection_data as conn
 import message_codes as codes
 from connection import Connection
-from coreset_finder.message import Message
-from coreset_finder.simpleCoreset import SimpleCoreset
+from message import Message
+from simpleCoreset import SimpleCoreset
 from coreset_tree_algorithm import CoresetTeeAlgorithm
 
 log.basicConfig(filename='worker.log', level=log.DEBUG)
@@ -20,7 +20,9 @@ CORSET_ALGORITHM = SimpleCoreset.coreset_alg
 
 
 class Worker(object):
-    def __init__(self, number=0):
+    def __init__(self, server):
+        number = 0
+        self._server = server
         self._coresetTreeBuilder = CoresetTeeAlgorithm(CORSET_ALGORITHM, CORESET_SIZE)
         self._init_number(number)
 
@@ -35,7 +37,7 @@ class Worker(object):
         """
 
         server_connection = Connection()
-        server_connection.connect(conn.server_ip, conn.worker_port)
+        server_connection.connect(self._server, conn.worker_port)
 
         self._register_to_server(server_connection)
 

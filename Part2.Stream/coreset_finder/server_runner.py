@@ -1,14 +1,13 @@
-from StreamingClient import Client
 import sys
+from server import Server
 
-#starts up the client
+# Start the server.
 try:
-    client = Client(sys.argv[1])
-    client.run_client()
+    server = Server(sys.argv[1])
+    server.main()
 except KeyboardInterrupt:
     print "caught SIGINT, dying."
     exit()
 except AttributeError as e:
     print e
     exit()
-

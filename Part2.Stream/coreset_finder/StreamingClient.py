@@ -17,7 +17,8 @@ def _print_server_response_code(code):
 
 
 class Client:
-    def __init__(self):
+    def __init__(self, server):
+        self._server = server
         self._connection = Connection()
 
     def run_client(self):
@@ -47,7 +48,7 @@ class Client:
         connects to the server
         :return:
         """
-        self._connection.connect(conn.server_ip, conn.client_port)
+        self._connection.connect(self._server, conn.client_port)
 
     def _process_chunk(self, chunk):
         print "read from csv chunk in size of: ", len(chunk)

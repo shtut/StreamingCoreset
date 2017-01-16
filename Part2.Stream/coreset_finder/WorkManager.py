@@ -3,8 +3,8 @@ import time
 from threading import Thread
 import psutil
 from StreamingClient import Client
-from coreset_finder.SummaryWorker import SummaryWorker
-
+from SummaryWorker import SummaryWorker
+import connection_data as conn
 from coreset_finder.server import Server
 from worker import Worker
 
@@ -37,18 +37,18 @@ class WorkManager:
 
     @staticmethod
     def _run_client():
-        client = Client()
+        client = Client(conn.server_ip)
         client.run_client()
 
     @staticmethod
     def _start_summary_worker():
-        summary_worker = SummaryWorker()
+        summary_worker = SummaryWorker(conn.server_ip)
         Thread(target=summary_worker.register_and_handle).start()
         time.sleep(1)
 
     def _start_workers(self):
         for i in xrange(self.number_of_workers):
-            worker = Worker()
+            worker = Worker(conn.server_ip)
             Thread(target=worker.register_and_handle).start()
             time.sleep(1)
 

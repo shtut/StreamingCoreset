@@ -1,9 +1,9 @@
-import socket
-import message_codes as codes
 import pickle
+import socket
+
 import array_util as arr_util
-from coreset_finder.message import Message
-import sys
+import message_codes as codes
+from message import Message
 
 PACKET_SIZE = 2000
 

@@ -9,7 +9,7 @@ import array_util as utils
 import connection_data as conn
 import message_codes as codes
 from connectionListener import ConnectionListener
-from coreset_finder.message import Message
+from message import Message
 
 log.basicConfig(filename='server.log', level=log.DEBUG)
 
