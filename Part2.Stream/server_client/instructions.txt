@@ -1,4 +1,0 @@
-run python server.py localhost
-run python worker.py
-run python streaming.py
-
