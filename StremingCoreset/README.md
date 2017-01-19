@@ -1,3 +1,5 @@
+#Streaming Core-Set (Client-Server)
+
 __**General Description:**__
 
 We've created a Server-Client python module which can cluster streaming data and generate a final 'Core-Set', which will provide a small representation of the large data.
