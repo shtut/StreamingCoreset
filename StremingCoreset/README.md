@@ -1,19 +1,19 @@
-<b><u>General Description:</u></b>
+__**General Description:**__
 
 We've created a Server-Client python module which can cluster streaming data and generate a final 'Core-Set', which will provide a small representation of the large data.
 
 
-<b><u>Design Description:</u></b>
+__**Design Description:**__
 
 The server client module is a system which was design to cluster large amounts of data in streaming format.
 
 The system is made of 3 main parts-
 
-The Server
-The Client
-The Worker
+1. The Server
+2. The Client
+3. The Worker
 
-It works in the following manner:
+__It works in the following manner:__
 
 ![alt tag](http://i.imgur.com/vEERftm.png)
 
