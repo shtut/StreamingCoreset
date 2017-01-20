@@ -2,12 +2,12 @@
 
 __**General Description:**__
 
-We've created a Server-Client python module which can cluster streaming data and generate a final 'Core-Set', which will provide a small representation of the large data.
+A Server-Client python module which cluster streaming data and generate a final 'Core-Set'. The 'Core-Set' provides a small representation of the large data. The project was based on Big Data methodologies using deep learning algorithms on Amazon AWS (mainly Amazon EC2).
 
 
 __**Design Description:**__
 
-The server client module is a system which was design to cluster large amounts of data in streaming format.
+The system is designed to cluster large amounts of data in streaming format.
 
 The system is made of 3 main parts-
 
