@@ -17,7 +17,7 @@ The system is made of 3 main parts-
 
 __It works in the following manner:__
 
-![alt tag](http://i.imgur.com/vEERftm.png)
+![alt tag](https://raw.githubusercontent.com/shtut/StreamingCoreset/StremingCoreset/Documentation/website/media/design2.png)
 
 The client provides the data to the server, streaming it via socket communication.
 The server then collects the data and distributes it to the workers.
