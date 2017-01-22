@@ -1,3 +1,8 @@
+"""
+Streaming client mimics the client.
+It generates the data and streams it to the server, then requests the summary.
+"""
+
 import time
 import array_util
 import connection_data as conn
@@ -34,7 +39,7 @@ class Client:
 
     def get_summary_points(self):
         """
-        requests and handles the summary (coreset) from the server
+            requests and handles the summary (coreset) from the server
         :return:
         """
         print "Getting the summary..."

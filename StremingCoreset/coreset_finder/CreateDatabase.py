@@ -1,3 +1,6 @@
+"""
+Creates a csv file of a sparse matrix to be used as a database for the program.
+"""
 import csv
 
 import numpy as np

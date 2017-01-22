@@ -1,6 +1,8 @@
+"""
+Defines the socket connection- handles the Receive and Send functions while dividing the data into smaller 'PACKET_SIZE' packets in order to avoid the socket max data limit.
+"""
 import pickle
 import socket
-
 import array_util as arr_util
 import message_codes as codes
 from message import Message

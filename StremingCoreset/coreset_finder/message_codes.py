@@ -1,4 +1,6 @@
-#codes used in the communication between the server/client and server/workers
+"""
+Defines the codes used in the communication between the client/server and server/worker.
+"""
 REGISTER_WORKER = 1
 ACCEPTED = 2
 ADD_POINTS = 3

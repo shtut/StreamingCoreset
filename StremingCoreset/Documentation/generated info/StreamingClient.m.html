@@ -3,8 +3,9 @@
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 
-    <title>coreset_finder API documentation</title>
-    <meta name="description" content="" />
+    <title>coreset_finder.StreamingClient API documentation</title>
+    <meta name="description" content="Streaming client mimics the client.
+It generates the data and streams it to the server, then request..." />
 
   <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,300' rel='stylesheet' type='text/css'>
   
@@ -1038,31 +1039,22 @@ table {
     <ul id="index">
 
 
-
-    <li class="set"><h3><a href="#header-submodules">Sub-modules</a></h3>
+    <li class="set"><h3><a href="#header-classes">Classes</a></h3>
       <ul>
-        <li class="mono"><a href="CreateDatabase.m.html">coreset_finder.CreateDatabase</a></li>
-        <li class="mono"><a href="StreamingClient.m.html">coreset_finder.StreamingClient</a></li>
-        <li class="mono"><a href="SummaryWorker.m.html">coreset_finder.SummaryWorker</a></li>
-        <li class="mono"><a href="WorkManager.m.html">coreset_finder.WorkManager</a></li>
-        <li class="mono"><a href="array_util.m.html">coreset_finder.array_util</a></li>
-        <li class="mono"><a href="client_runner.m.html">coreset_finder.client_runner</a></li>
-        <li class="mono"><a href="connection.m.html">coreset_finder.connection</a></li>
-        <li class="mono"><a href="connectionListener.m.html">coreset_finder.connectionListener</a></li>
-        <li class="mono"><a href="connection_data.m.html">coreset_finder.connection_data</a></li>
-        <li class="mono"><a href="connection_util.m.html">coreset_finder.connection_util</a></li>
-        <li class="mono"><a href="coreset_tree_algorithm.m.html">coreset_finder.coreset_tree_algorithm</a></li>
-        <li class="mono"><a href="message.m.html">coreset_finder.message</a></li>
-        <li class="mono"><a href="message_codes.m.html">coreset_finder.message_codes</a></li>
-        <li class="mono"><a href="server.m.html">coreset_finder.server</a></li>
-        <li class="mono"><a href="server_runner.m.html">coreset_finder.server_runner</a></li>
-        <li class="mono"><a href="simpleCoreset.m.html">coreset_finder.simpleCoreset</a></li>
-        <li class="mono"><a href="stack.m.html">coreset_finder.stack</a></li>
-        <li class="mono"><a href="summary_worker_runner.m.html">coreset_finder.summary_worker_runner</a></li>
-        <li class="mono"><a href="worker.m.html">coreset_finder.worker</a></li>
-        <li class="mono"><a href="worker_runner.m.html">coreset_finder.worker_runner</a></li>
+        <li class="mono">
+        <span class="class_name"><a href="#coreset_finder.StreamingClient.Client">Client</a></span>
+        
+          
+  <ul>
+    <li class="mono"><a href="#coreset_finder.StreamingClient.Client.__init__">__init__</a></li>
+    <li class="mono"><a href="#coreset_finder.StreamingClient.Client.get_summary_points">get_summary_points</a></li>
+    <li class="mono"><a href="#coreset_finder.StreamingClient.Client.run_client">run_client</a></li>
+  </ul>
+
+        </li>
       </ul>
     </li>
+
     </ul>
   </div>
 
@@ -1074,170 +1066,242 @@ table {
 
 
   <header id="section-intro">
-  <h1 class="title"><span class="name">coreset_finder</span> module</h1>
+  <h1 class="title"><span class="name">coreset_finder.StreamingClient</span> module</h1>
+  <p>Streaming client mimics the client.
+It generates the data and streams it to the server, then requests the summary.</p>
   
-  
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-coreset_finder.StreamingClient', this);">Show source &equiv;</a></p>
+  <div id="source-coreset_finder.StreamingClient" class="source">
+    <div class="codehilite"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Streaming client mimics the client.</span>
+<span class="sd">It generates the data and streams it to the server, then requests the summary.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">array_util</span>
+<span class="kn">import</span> <span class="nn">connection_data</span> <span class="kn">as</span> <span class="nn">conn</span>
+<span class="kn">import</span> <span class="nn">message_codes</span> <span class="kn">as</span> <span class="nn">codes</span>
+<span class="kn">from</span> <span class="nn">CreateDatabase</span> <span class="kn">import</span> <span class="n">createDB</span>
+<span class="kn">from</span> <span class="nn">connection</span> <span class="kn">import</span> <span class="n">Connection</span>
+<span class="kn">from</span> <span class="nn">message</span> <span class="kn">import</span> <span class="n">Message</span>
+
+
+<span class="k">def</span> <span class="nf">_print_server_response_code</span><span class="p">(</span><span class="n">code</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">code</span> <span class="o">==</span> <span class="n">codes</span><span class="o">.</span><span class="n">TERMINATE</span><span class="p">:</span>
+        <span class="k">print</span> <span class="s2">&quot;Problem, server died&quot;</span>
+    <span class="k">elif</span> <span class="nb">int</span><span class="p">(</span><span class="n">code</span><span class="p">)</span> <span class="o">==</span> <span class="n">codes</span><span class="o">.</span><span class="n">ACCEPTED</span><span class="p">:</span>
+        <span class="k">print</span> <span class="s2">&quot;Points sent successfully!&quot;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">print</span> <span class="s2">&quot;Problem, received code&quot;</span><span class="p">,</span> <span class="n">code</span>
+
+
+<span class="k">class</span> <span class="nc">Client</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">server</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_server</span> <span class="o">=</span> <span class="n">server</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_connection</span> <span class="o">=</span> <span class="n">Connection</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">run_client</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        starts the client. creates a database and sends it to the server,  then asks for the summary (coreset)</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_connect_server</span><span class="p">()</span>
+        <span class="n">db</span> <span class="o">=</span> <span class="n">createDB</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_process_chunk</span><span class="p">)</span>
+        <span class="n">db</span><span class="o">.</span><span class="n">read_from_csv</span><span class="p">(</span><span class="s1">&#39;alice.csv&#39;</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">get_summary_points</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">get_summary_points</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            requests and handles the summary (coreset) from the server</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">print</span> <span class="s2">&quot;Getting the summary...&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_connection</span><span class="o">.</span><span class="n">send_message</span><span class="p">(</span><span class="n">Message</span><span class="p">(</span><span class="n">codes</span><span class="o">.</span><span class="n">GET_UNIFIED</span><span class="p">))</span>
+        <span class="n">message</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_connection</span><span class="o">.</span><span class="n">receive_message</span><span class="p">()</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">message</span><span class="o">.</span><span class="n">points</span>
+        <span class="k">print</span> <span class="s2">&quot;Received the summary:</span><span class="se">\n</span><span class="s2"> </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">data</span>
+
+    <span class="k">def</span> <span class="nf">_connect_server</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        connects to the server</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_connection</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_server</span><span class="p">,</span> <span class="n">conn</span><span class="o">.</span><span class="n">client_port</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_process_chunk</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">chunk</span><span class="p">):</span>
+        <span class="k">print</span> <span class="s2">&quot;read from csv chunk in size of: &quot;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">chunk</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_send_points</span><span class="p">(</span><span class="n">array_util</span><span class="o">.</span><span class="n">convert_points_to_float</span><span class="p">(</span><span class="n">chunk</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">_send_points</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">chunk</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_connection</span><span class="o">.</span><span class="n">send_message</span><span class="p">(</span><span class="n">Message</span><span class="p">(</span><span class="n">codes</span><span class="o">.</span><span class="n">ADD_POINTS</span><span class="p">,</span> <span class="n">chunk</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_get_server_response</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_get_server_response</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">message</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_connection</span><span class="o">.</span><span class="n">receive_message</span><span class="p">()</span>
+        <span class="n">_print_server_response_code</span><span class="p">(</span><span class="n">message</span><span class="o">.</span><span class="n">code</span><span class="p">)</span>
+</pre></div>
+
+  </div>
 
   </header>
 
   <section id="section-items">
 
 
-
-    <h2 class="section-title" id="header-submodules">Sub-modules</h2>
+    <h2 class="section-title" id="header-classes">Classes</h2>
+      
       <div class="item">
-      <p class="name"><a href="CreateDatabase.m.html">coreset_finder.CreateDatabase</a></p>
+      <p id="coreset_finder.StreamingClient.Client" class="name">class <span class="ident">Client</span></p>
       
   
-    <div class="desc"><p>Creates a csv file of a sparse matrix to be used as a database for the program.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-coreset_finder.StreamingClient.Client', this);">Show source &equiv;</a></p>
+  <div id="source-coreset_finder.StreamingClient.Client" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">Client</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">server</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_server</span> <span class="o">=</span> <span class="n">server</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_connection</span> <span class="o">=</span> <span class="n">Connection</span><span class="p">()</span>
 
-      </div>
-      <div class="item">
-      <p class="name"><a href="StreamingClient.m.html">coreset_finder.StreamingClient</a></p>
-      
+    <span class="k">def</span> <span class="nf">run_client</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        starts the client. creates a database and sends it to the server,  then asks for the summary (coreset)</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_connect_server</span><span class="p">()</span>
+        <span class="n">db</span> <span class="o">=</span> <span class="n">createDB</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_process_chunk</span><span class="p">)</span>
+        <span class="n">db</span><span class="o">.</span><span class="n">read_from_csv</span><span class="p">(</span><span class="s1">&#39;alice.csv&#39;</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">get_summary_points</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">get_summary_points</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            requests and handles the summary (coreset) from the server</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">print</span> <span class="s2">&quot;Getting the summary...&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_connection</span><span class="o">.</span><span class="n">send_message</span><span class="p">(</span><span class="n">Message</span><span class="p">(</span><span class="n">codes</span><span class="o">.</span><span class="n">GET_UNIFIED</span><span class="p">))</span>
+        <span class="n">message</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_connection</span><span class="o">.</span><span class="n">receive_message</span><span class="p">()</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">message</span><span class="o">.</span><span class="n">points</span>
+        <span class="k">print</span> <span class="s2">&quot;Received the summary:</span><span class="se">\n</span><span class="s2"> </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">data</span>
+
+    <span class="k">def</span> <span class="nf">_connect_server</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        connects to the server</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_connection</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_server</span><span class="p">,</span> <span class="n">conn</span><span class="o">.</span><span class="n">client_port</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_process_chunk</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">chunk</span><span class="p">):</span>
+        <span class="k">print</span> <span class="s2">&quot;read from csv chunk in size of: &quot;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">chunk</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_send_points</span><span class="p">(</span><span class="n">array_util</span><span class="o">.</span><span class="n">convert_points_to_float</span><span class="p">(</span><span class="n">chunk</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">_send_points</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">chunk</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_connection</span><span class="o">.</span><span class="n">send_message</span><span class="p">(</span><span class="n">Message</span><span class="p">(</span><span class="n">codes</span><span class="o">.</span><span class="n">ADD_POINTS</span><span class="p">,</span> <span class="n">chunk</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_get_server_response</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_get_server_response</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">message</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_connection</span><span class="o">.</span><span class="n">receive_message</span><span class="p">()</span>
+        <span class="n">_print_server_response_code</span><span class="p">(</span><span class="n">message</span><span class="o">.</span><span class="n">code</span><span class="p">)</span>
+</pre></div>
+
+  </div>
+</div>
+
+
+      <div class="class">
+          <h3>Ancestors (in MRO)</h3>
+          <ul class="class_list">
+          <li><a href="#coreset_finder.StreamingClient.Client">Client</a></li>
+          </ul>
+          <h3>Methods</h3>
+            
+  <div class="item">
+    <div class="name def" id="coreset_finder.StreamingClient.Client.__init__">
+    <p>def <span class="ident">__init__</span>(</p><p>self, server)</p>
+    </div>
+    
+
+    
   
-    <div class="desc"><p>Streaming client mimics the client.
-It generates the data and streams it to the server, then requests the summary.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-coreset_finder.StreamingClient.Client.__init__', this);">Show source &equiv;</a></p>
+  <div id="source-coreset_finder.StreamingClient.Client.__init__" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">server</span><span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_server</span> <span class="o">=</span> <span class="n">server</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_connection</span> <span class="o">=</span> <span class="n">Connection</span><span class="p">()</span>
+</pre></div>
 
-      </div>
-      <div class="item">
-      <p class="name"><a href="SummaryWorker.m.html">coreset_finder.SummaryWorker</a></p>
-      
+  </div>
+</div>
+
+  </div>
   
-    <div class="desc"><p>The summary worker handles the creation of the final core-set.
-Holds a regular worker.</p></div>
+            
+  <div class="item">
+    <div class="name def" id="coreset_finder.StreamingClient.Client.get_summary_points">
+    <p>def <span class="ident">get_summary_points</span>(</p><p>self)</p>
+    </div>
+    
 
-      </div>
-      <div class="item">
-      <p class="name"><a href="WorkManager.m.html">coreset_finder.WorkManager</a></p>
-      
+    
   
-    <div class="desc"><p>Simulates the entire working system.
-Sets a server, registers a number of workers (defined in the WorkManager constructor) and a summary worker, and connects a clients.</p>
-<p>The client creates a DB and sends the data to the server.
-Then it asks for the summary which the server provides, and exits.</p></div>
+    <div class="desc"><p>requests and handles the summary (coreset) from the server
+:return:</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-coreset_finder.StreamingClient.Client.get_summary_points', this);">Show source &equiv;</a></p>
+  <div id="source-coreset_finder.StreamingClient.Client.get_summary_points" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">get_summary_points</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        requests and handles the summary (coreset) from the server</span>
+<span class="sd">    :return:</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">print</span> <span class="s2">&quot;Getting the summary...&quot;</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_connection</span><span class="o">.</span><span class="n">send_message</span><span class="p">(</span><span class="n">Message</span><span class="p">(</span><span class="n">codes</span><span class="o">.</span><span class="n">GET_UNIFIED</span><span class="p">))</span>
+    <span class="n">message</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_connection</span><span class="o">.</span><span class="n">receive_message</span><span class="p">()</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">message</span><span class="o">.</span><span class="n">points</span>
+    <span class="k">print</span> <span class="s2">&quot;Received the summary:</span><span class="se">\n</span><span class="s2"> </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">data</span>
+</pre></div>
 
-      </div>
-      <div class="item">
-      <p class="name"><a href="array_util.m.html">coreset_finder.array_util</a></p>
-      
+  </div>
+</div>
+
+  </div>
   
-    <div class="desc"><p>Defines some helper functions for arrays- e.g. split to chunk size</p></div>
+            
+  <div class="item">
+    <div class="name def" id="coreset_finder.StreamingClient.Client.run_client">
+    <p>def <span class="ident">run_client</span>(</p><p>self)</p>
+    </div>
+    
 
-      </div>
-      <div class="item">
-      <p class="name"><a href="client_runner.m.html">coreset_finder.client_runner</a></p>
-      
+    
   
-    <div class="desc"><p>Creates and runs a client.</p></div>
+    <div class="desc"><p>starts the client. creates a database and sends it to the server,  then asks for the summary (coreset)
+:return:</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-coreset_finder.StreamingClient.Client.run_client', this);">Show source &equiv;</a></p>
+  <div id="source-coreset_finder.StreamingClient.Client.run_client" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">run_client</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    starts the client. creates a database and sends it to the server,  then asks for the summary (coreset)</span>
+<span class="sd">    :return:</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_connect_server</span><span class="p">()</span>
+    <span class="n">db</span> <span class="o">=</span> <span class="n">createDB</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_process_chunk</span><span class="p">)</span>
+    <span class="n">db</span><span class="o">.</span><span class="n">read_from_csv</span><span class="p">(</span><span class="s1">&#39;alice.csv&#39;</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">get_summary_points</span><span class="p">()</span>
+</pre></div>
 
-      </div>
-      <div class="item">
-      <p class="name"><a href="connection.m.html">coreset_finder.connection</a></p>
-      
+  </div>
+</div>
+
+  </div>
   
-    <div class="desc"><p>Defines the socket connection- handles the Receive and Send functions while dividing the data into smaller 'PACKET_SIZE' packets in order to avoid the socket max data limit.</p></div>
-
       </div>
-      <div class="item">
-      <p class="name"><a href="connectionListener.m.html">coreset_finder.connectionListener</a></p>
-      
-  
-    <div class="desc"><p>Listens to a current connection</p></div>
-
       </div>
-      <div class="item">
-      <p class="name"><a href="connection_data.m.html">coreset_finder.connection_data</a></p>
-      
-  
-    <div class="desc"><p>Defines the connection information:  Server IP, Worker port and Client port.</p></div>
 
-      </div>
-      <div class="item">
-      <p class="name"><a href="connection_util.m.html">coreset_finder.connection_util</a></p>
-      
-  
-    <div class="desc"><p>Defines some helper functions which wrap the serialization and sending of the information.</p></div>
-
-      </div>
-      <div class="item">
-      <p class="name"><a href="coreset_tree_algorithm.m.html">coreset_finder.coreset_tree_algorithm</a></p>
-      
-  
-    <div class="desc"><p>Exists within each worker-
-Works by creating a binary tree, where each node is of size 'CORESET_SIZE'.
-The leaves are the original data, and each level above provides a smaller and better representation of the data.
-The root holds the best representation of all the leaves: the core-set.
-Has a config...</p></div>
-
-      </div>
-      <div class="item">
-      <p class="name"><a href="message.m.html">coreset_finder.message</a></p>
-      
-  
-    <div class="desc"><p>Defines the message class used in socket communication</p></div>
-
-      </div>
-      <div class="item">
-      <p class="name"><a href="message_codes.m.html">coreset_finder.message_codes</a></p>
-      
-  
-    <div class="desc"><p>Defines the codes used in the communication between the client/server and server/worker.</p></div>
-
-      </div>
-      <div class="item">
-      <p class="name"><a href="server.m.html">coreset_finder.server</a></p>
-      
-  
-    <div class="desc"><p>The server coordinates between all the registered workers and the client.
-Listens to incoming commands from the client-  when receiving data, divides it between the workers for processing.
-Upon request collects the unified core-set from all the workers and sends it back to the client.</p></div>
-
-      </div>
-      <div class="item">
-      <p class="name"><a href="server_runner.m.html">coreset_finder.server_runner</a></p>
-      
-  
-    <div class="desc"><p>Creates and runs a server.</p></div>
-
-      </div>
-      <div class="item">
-      <p class="name"><a href="simpleCoreset.m.html">coreset_finder.simpleCoreset</a></p>
-      
-  
-    <div class="desc"><p>Provides a very simplistic method for merging nodes in the tree.
-Contains a simple coreset algorithm - return a random portion of the data in size of coreSetSize</p></div>
-
-      </div>
-      <div class="item">
-      <p class="name"><a href="stack.m.html">coreset_finder.stack</a></p>
-      
-  
-    <div class="desc"><p>Implementation of a stack data structure.</p></div>
-
-      </div>
-      <div class="item">
-      <p class="name"><a href="summary_worker_runner.m.html">coreset_finder.summary_worker_runner</a></p>
-      
-  
-    <div class="desc"><p>Creates and runs a summary worker.</p></div>
-
-      </div>
-      <div class="item">
-      <p class="name"><a href="worker.m.html">coreset_finder.worker</a></p>
-      
-  
-    <div class="desc"><p>The worker handles the creation of the core-set.
-Contains an instance of 'CoresetTreeAlgorithm' which creates a binary tree from the data and returns the core-set.</p></div>
-
-      </div>
-      <div class="item">
-      <p class="name"><a href="worker_runner.m.html">coreset_finder.worker_runner</a></p>
-      
-  
-    <div class="desc"><p>Creates and runs a worker.</p></div>
-
-      </div>
   </section>
 
     </article>

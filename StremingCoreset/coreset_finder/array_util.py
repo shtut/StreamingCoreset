@@ -1,3 +1,6 @@
+"""
+Defines some helper functions for arrays- e.g. split to chunk size
+"""
 import numpy as np
 
 

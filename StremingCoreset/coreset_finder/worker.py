@@ -1,3 +1,8 @@
+"""
+The worker handles the creation of the core-set.
+Contains an instance of 'CoresetTreeAlgorithm' which creates a binary tree from the data and returns the core-set.
+"""
+
 import logging as log
 import random as rand
 import socket

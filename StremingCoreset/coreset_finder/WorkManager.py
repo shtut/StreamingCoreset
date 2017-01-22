@@ -1,3 +1,10 @@
+"""
+Simulates the entire working system.
+Sets a server, registers a number of workers (defined in the WorkManager constructor) and a summary worker, and connects a clients.
+
+The client creates a DB and sends the data to the server.
+Then it asks for the summary which the server provides, and exits.
+"""
 import sys
 import time
 from threading import Thread
@@ -71,11 +78,12 @@ def kill_process(process_name):
 
 
 try:
-    manager = WorkManager(2)
-    manager.main()
-    # time.sleep(3 * manager.number_of_workers)
-    kill_process("python.exe")
-    sys.exit()
+    if __name__ == '__main__':
+        manager = WorkManager(2)
+        manager.main()
+        # time.sleep(3 * manager.number_of_workers)
+        kill_process("python.exe")
+        sys.exit()
 
 
 except KeyboardInterrupt:

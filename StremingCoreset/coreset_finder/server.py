@@ -1,3 +1,9 @@
+"""
+The server coordinates between all the registered workers and the client.
+Listens to incoming commands from the client-  when receiving data, divides it between the workers for processing.
+Upon request collects the unified core-set from all the workers and sends it back to the client.
+
+"""
 import logging as log
 import time
 from Queue import PriorityQueue

@@ -1,3 +1,8 @@
+"""
+Provides a very simplistic method for merging nodes in the tree.
+Contains a simple coreset algorithm - return a random portion of the data in size of coreSetSize
+
+"""
 import random
 
 class SimpleCoreset:

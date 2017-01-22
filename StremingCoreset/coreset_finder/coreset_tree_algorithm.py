@@ -1,5 +1,9 @@
 """
-Online coresets.
+Exists within each worker-
+Works by creating a binary tree, where each node is of size 'CORESET_SIZE'.
+The leaves are the original data, and each level above provides a smaller and better representation of the data.
+The root holds the best representation of all the leaves: the core-set.
+Has a configurable merging algorithm - 'CORESET-ALGORITHM'.
 """
 
 from collections import namedtuple

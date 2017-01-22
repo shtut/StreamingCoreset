@@ -1,3 +1,7 @@
+"""
+The summary worker handles the creation of the final core-set.
+Holds a regular worker.
+"""
 from worker import Worker
 import message_codes as codes
 

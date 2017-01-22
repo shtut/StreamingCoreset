@@ -1,3 +1,6 @@
+"""
+Listens to a current connection
+"""
 import socket
 from connection import Connection
 

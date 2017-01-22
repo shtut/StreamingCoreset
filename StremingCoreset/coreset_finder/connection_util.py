@@ -1,9 +1,12 @@
+"""
+Defines some helper functions which wrap the serialization and sending of the information.
+"""
 import pickle
 
 import message_codes as codes
 
 
-def send_points(points, connection_socket):
+def send_poixnts(points, connection_socket):
     """
     serializes the given data and sends it to the given socket.
     also invokes the 'ADD_POINTS' code.
