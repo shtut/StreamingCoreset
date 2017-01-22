@@ -14,11 +14,21 @@ class Connection(object):
         self._address = None
 
     def connect(self, server, port):
+        """
+        creates a socket and connects to the given server via the given port
+        :param server: server address
+        :param port: port number
+        :return:
+        """
         self._socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         server_address = (server, port)
         self._socket.connect(server_address)
 
     def receive_message(self):
+        """
+        returns the received message
+        :return: received message
+        """
         len_str = self._socket.recv(10, 0)
         if len_str == '':
             return Message(codes.TERMINATE)
@@ -42,6 +52,11 @@ class Connection(object):
         return res
 
     def send_message(self, message):
+        """
+        splits the given message into 'PACKET_SIZE' packets, and sends them
+        :param message: the message to send
+        :return:
+        """
         serialized, size = self._serialize_data(message)
         packets = arr_util.array_split(serialized, PACKET_SIZE)
         self._socket.send(self._size_in_bytes(packets))
@@ -65,4 +80,8 @@ class Connection(object):
         return bytes("%010d" % (len(data)))
 
     def close(self):
+        """
+        closes the connection
+        :return:
+        """
         self._socket.close()

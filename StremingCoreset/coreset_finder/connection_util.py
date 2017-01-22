@@ -29,6 +29,11 @@ def send_results(result, client_socket):
 
 
 def receive_command(connection):
+    """
+
+    :param connection:
+    :return:
+    """
     command_string = connection.recv(1, 0)
     if command_string == '':
         command_string = codes.TERMINATE
@@ -36,6 +41,11 @@ def receive_command(connection):
 
 
 def receive_add_points(connection):
+    """
+
+    :param connection:
+    :return:
+    """
     length = int(connection.recv(10, 0))
     data = connection.recv(length, 0)
     connection.send(bytes(codes.ACCEPTED))

@@ -18,10 +18,15 @@ class WorkManager:
     def number_of_workers(self):
         """
         number of workers to launch
+        :return:
         """
         return self._workers_num
 
     def main(self):
+        """
+        starts the server, registers workers and runs the client
+        :return:
+        """
         # start server
         self._run_server()
         time.sleep(1)
@@ -54,6 +59,11 @@ class WorkManager:
 
 
 def kill_process(process_name):
+    """
+    given process name, kills the process
+    :param process_name: process name
+    :return: None
+    """
     for process in psutil.process_iter():
         # check whether the process name matches
         if process.name() == process_name:

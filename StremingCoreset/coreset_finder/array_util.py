@@ -3,10 +3,11 @@ import numpy as np
 
 def array_split(points, size):
     """
-
-    :param points:
-    :param size:
-    :return:
+    given an array 'points', splits into smaller arrays of size 'size'
+    i.e. [1,2,3,4,5,6,7,8,9,10] with size=2  => [[1, 2], [3, 4], [5, 6], [7, 8], [9, 10]]
+    :param points: original array
+    :param size: requested size of smaller arrays
+    :return: an array containing smaller arrays of size='size'
     """
     start_index = 0
     end_index = size

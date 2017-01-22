@@ -28,6 +28,7 @@ class Server(object):
         """
         initializes the server-  makes the server prepared to register the workers and the client
         after registration listens to incoming commands and performs accordingly
+        :return:
         """
         client_handler = self._start_handlers()
         print "Server is UP"
@@ -42,7 +43,8 @@ class Server(object):
         return client_handler
 
     def _handle_worker_registration(self):
-        """Separate thread that handles worker registration.
+        """
+        Separate thread that handles worker registration.
 
         Opens a socket and waits for worker connections. Accepts only
         messages codes.REGISTER_WORKER. When the message is received the
@@ -50,8 +52,8 @@ class Server(object):
         priority queue that keeps track of the worker load. For each worker
         a new thread is spawned and it handles the future communication with the
         worker while this main thread continues accepting workers.
+        :return:
         """
-
         worker_listener = ConnectionListener(self._server_name, conn.worker_port)
 
         while True:
@@ -80,7 +82,8 @@ class Server(object):
         t.start()
 
     def _send_to_worker(self, data):
-        """Sends points to the registered workers.
+        """
+        Sends points to the registered workers.
 
         The workers are chosen according to the current load which is
         defined by by the total number of points sent to the machine.
@@ -89,9 +92,9 @@ class Server(object):
         2. We communicate the number of points to be sent to the worker
         3. We send the points.
         All data sent over the channel is byte-serialized.
+        :param data:
+        :return:
         """
-
-        #
         if len(self._registered_workers) == 0:
             raise Exception("No workers available.")
 
@@ -123,15 +126,16 @@ class Server(object):
         worker_connection.close()
 
     def _handle_client(self):
-        """Thread that handles the user connection.
+        """
+        Thread that handles the user connection.
 
         User is the entity using our API. They have the option to send new
         points or ask for the current coreset. In this approach, they
         connect to the server and send commands via sockets. This is ideal
         for a cloud setup. Thread opens a new port and awaits for the
         client connection.
+        :return:
         """
-
         client_listener = ConnectionListener(self._server_name, conn.client_port)
         log.debug("Waiting for client connection...")
         client_connection = client_listener.accept()
@@ -159,12 +163,15 @@ class Server(object):
             self._send_to_worker(split)
 
     def get_summary_from_workers(self, client_connection):
-        """Queries each worker for the current summary
+        """
+        Queries each worker for the current summary
 
         Each registered worker is asked for the current summary
         via codes.GET_UNIFIED. Then the function waits till all the
         chunks arrive in a for loop. When the data is ready
         it is serialized and sent to the client.
+        :param client_connection:
+        :return:
         """
         print "Getting summaries from workers"
 

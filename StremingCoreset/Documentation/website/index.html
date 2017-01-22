@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<head>
+  <title>Server-Client clustering</title>
+  <meta charset="utf-8">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href = "http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+  <link rel="icon" type="image/png" href="http://www.jinfonet.com/images/icon-bigdata-2.png">
+  
+	<style>
+	body {
+		background-color: #5b5f60;
+		//background-image: url('http://designroast.org/wp-content/uploads/2014/02/pattern-thepatternlibrary.png');
+		color: white;
+		margin-bottom: 20px;
+
+	}
+	h1 {
+		color: rgb(75, 172, 198);
+		font-weight: bold;
+
+		font-size:400%;
+	}
+	
+	h2 {
+		color: rgb(75, 172, 198);
+		font-weight: bold;
+
+	}
+	.row {
+		background-color:rgba(0, 0, 0, 0.6);
+		border-right-style: solid;
+		border-left-style: solid;
+		border-width: thick;
+		border-color: white;
+		padding-bottom: 100%;
+		margin-bottom: -100%;
+		overflow-y: hidden;
+	}
+	
+	video, img{
+		width: 100%;
+		height: auto;
+		margin: 10px;
+	}
+	
+	li{
+		font-weight: bold;
+	}
+	
+	</style>
+  
+</head>
+
+<body>
+
+
+
+<div class="container">
+		<div class="row">
+		
+		<div class="col-sm-1">
+		
+		</div>
+		
+		<div class="col-sm-10">
+			<h1>Streaming Coreset</h1>
+			<br><br>
+			<h2 dir="LTR">General Description:</h2>
+			<br>
+			<p dir="LTR">We've created a Server-Client python module which can cluster streaming data and generate a final 'Coreset', which will provide a small representation of the large data.</p>
+			<br>
+			<h2 dir="LTR">Design Description:</h2>
+			<br>
+			<p dir="LTR">The server client module is a system which was design to cluster large amounts of data in streaming format.</p>
+			<p dir="LTR">The system is made of 3 main parts-</p>
+			<ul>
+				<li>
+					The Server
+				</li>
+				<li>
+					The Client
+				</li>
+				<li>
+					The Worker
+				</li>
+			</ul>
+			<br>
+			<p dir="LTR">It works in the following manner:</p>
+			<img src="media/design2.png">
+			<p dir="LTR">The client provides the data to the server, streaming it via socket communication.<br /> The server then collects the data and distributes it to the workers.<br /> Each worker creates a core-set from its given data.&nbsp; So that in every moment each worker has a corset of the data it received so far.</p>
+			<br>
+			<p dir="LTR">Upon request from the client, the server collects all the current core-sets from all the workers and sends them to the summary worker- a dedicated worker which creates the final core-set, and sends it back to the server.</p>
+			<p dir="LTR">The server then returns the final core-set to the client, and we receive a representing smaller portion of the streamed data.</p>
+			<br>
+			<h2 dir="LTR">Demonstration:</h2>
+			<p>Running the Streaming-Coreset on Amazon Cloud:
+			
+			<img src="media/labeled.jpeg">
+			<video controls>
+			  <source src="media/demo.mp4" type="video/mp4">
+			Your browser does not support the video tag.
+			</video>
+			
+			<h2>Code</h2>
+			<a href="https://github.com/shtut/StreamingCoreset" class="btn btn-info" role="button">Github</a>
+			<a href="../generated info/client_server_module-module.html" class="btn btn-info" role="button">Documentation</a>
+			
+			<br><br><br>
+			<p>project by:<br>			
+			Dvir Segal, Hadas Shahar and Roy Goldstein<br>
+			</p>
+		</div>
+		
+		<div class="col-sm-1">
+			
+		</div>
+		
+		</div>
+		
+</div>
+
+
+</body>
+</html>

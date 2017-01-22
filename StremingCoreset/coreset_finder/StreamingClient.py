@@ -34,7 +34,7 @@ class Client:
 
     def get_summary_points(self):
         """
-            requests and handles the summary (coreset) from the server
+        requests and handles the summary (coreset) from the server
         :return:
         """
         print "Getting the summary..."
