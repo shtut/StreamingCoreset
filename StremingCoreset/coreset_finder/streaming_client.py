@@ -7,7 +7,7 @@ import time
 import array_util
 import connection_data as conn
 import message_codes as codes
-from CreateDatabase import createDB
+from create_database import createDB
 from connection import Connection
 from message import Message
 
