@@ -3,7 +3,7 @@
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 
-    <title>coreset_finder.CreateDatabase API documentation</title>
+    <title>coreset_finder.create_database API documentation</title>
     <meta name="description" content="Creates a csv file of a sparse matrix to be used as a database for the program." />
 
   <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,300' rel='stylesheet' type='text/css'>
@@ -1040,7 +1040,7 @@ table {
     <li class="set"><h3><a href="#header-functions">Functions</a></h3>
       
   <ul>
-    <li class="mono"><a href="#coreset_finder.CreateDatabase.process_chunk">process_chunk</a></li>
+    <li class="mono"><a href="#coreset_finder.create_database.process_chunk">process_chunk</a></li>
   </ul>
 
     </li>
@@ -1048,16 +1048,16 @@ table {
     <li class="set"><h3><a href="#header-classes">Classes</a></h3>
       <ul>
         <li class="mono">
-        <span class="class_name"><a href="#coreset_finder.CreateDatabase.createDB">createDB</a></span>
+        <span class="class_name"><a href="#coreset_finder.create_database.createDB">createDB</a></span>
         
           
   <ul>
-    <li class="mono"><a href="#coreset_finder.CreateDatabase.createDB.__init__">__init__</a></li>
-    <li class="mono"><a href="#coreset_finder.CreateDatabase.createDB.create_matrix">create_matrix</a></li>
-    <li class="mono"><a href="#coreset_finder.CreateDatabase.createDB.generate_random_sparse_matrix">generate_random_sparse_matrix</a></li>
-    <li class="mono"><a href="#coreset_finder.CreateDatabase.createDB.generate_uniform_sparse_matrix">generate_uniform_sparse_matrix</a></li>
-    <li class="mono"><a href="#coreset_finder.CreateDatabase.createDB.read_from_csv">read_from_csv</a></li>
-    <li class="mono"><a href="#coreset_finder.CreateDatabase.createDB.write_matrix_to_csv">write_matrix_to_csv</a></li>
+    <li class="mono"><a href="#coreset_finder.create_database.createDB.__init__">__init__</a></li>
+    <li class="mono"><a href="#coreset_finder.create_database.createDB.create_matrix">create_matrix</a></li>
+    <li class="mono"><a href="#coreset_finder.create_database.createDB.generate_random_sparse_matrix">generate_random_sparse_matrix</a></li>
+    <li class="mono"><a href="#coreset_finder.create_database.createDB.generate_uniform_sparse_matrix">generate_uniform_sparse_matrix</a></li>
+    <li class="mono"><a href="#coreset_finder.create_database.createDB.read_from_csv">read_from_csv</a></li>
+    <li class="mono"><a href="#coreset_finder.create_database.createDB.write_matrix_to_csv">write_matrix_to_csv</a></li>
   </ul>
 
         </li>
@@ -1075,11 +1075,11 @@ table {
 
 
   <header id="section-intro">
-  <h1 class="title"><span class="name">coreset_finder.CreateDatabase</span> module</h1>
+  <h1 class="title"><span class="name">coreset_finder.create_database</span> module</h1>
   <p>Creates a csv file of a sparse matrix to be used as a database for the program.</p>
   
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-coreset_finder.CreateDatabase', this);">Show source &equiv;</a></p>
-  <div id="source-coreset_finder.CreateDatabase" class="source">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-coreset_finder.create_database', this);">Show source &equiv;</a></p>
+  <div id="source-coreset_finder.create_database" class="source">
     <div class="codehilite"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">Creates a csv file of a sparse matrix to be used as a database for the program.</span>
 <span class="sd">&quot;&quot;&quot;</span>
@@ -1202,7 +1202,7 @@ table {
     <h2 class="section-title" id="header-functions">Functions</h2>
       
   <div class="item">
-    <div class="name def" id="coreset_finder.CreateDatabase.process_chunk">
+    <div class="name def" id="coreset_finder.create_database.process_chunk">
     <p>def <span class="ident">process_chunk</span>(</p><p>chuck)</p>
     </div>
     
@@ -1210,8 +1210,8 @@ table {
     
   
   <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-coreset_finder.CreateDatabase.process_chunk', this);">Show source &equiv;</a></p>
-  <div id="source-coreset_finder.CreateDatabase.process_chunk" class="source">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-coreset_finder.create_database.process_chunk', this);">Show source &equiv;</a></p>
+  <div id="source-coreset_finder.create_database.process_chunk" class="source">
     <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">process_chunk</span><span class="p">(</span><span class="n">chuck</span><span class="p">):</span>
     <span class="k">print</span> <span class="nb">len</span><span class="p">(</span><span class="n">chuck</span><span class="p">)</span>
 </pre></div>
@@ -1225,14 +1225,14 @@ table {
     <h2 class="section-title" id="header-classes">Classes</h2>
       
       <div class="item">
-      <p id="coreset_finder.CreateDatabase.createDB" class="name">class <span class="ident">createDB</span></p>
+      <p id="coreset_finder.create_database.createDB" class="name">class <span class="ident">createDB</span></p>
       
   
     <div class="desc"><p>This class purpose is to manipulate database in CSV format
 The constructor generates 2 sparse matrices and zip between them</p></div>
   <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-coreset_finder.CreateDatabase.createDB', this);">Show source &equiv;</a></p>
-  <div id="source-coreset_finder.CreateDatabase.createDB" class="source">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-coreset_finder.create_database.createDB', this);">Show source &equiv;</a></p>
+  <div id="source-coreset_finder.create_database.createDB" class="source">
     <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">createDB</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This class purpose is to manipulate database in CSV format</span>
@@ -1332,11 +1332,11 @@ The constructor generates 2 sparse matrices and zip between them</p></div>
       <div class="class">
           <h3>Ancestors (in MRO)</h3>
           <ul class="class_list">
-          <li><a href="#coreset_finder.CreateDatabase.createDB">createDB</a></li>
+          <li><a href="#coreset_finder.create_database.createDB">createDB</a></li>
           </ul>
           <h3>Instance variables</h3>
             <div class="item">
-            <p id="coreset_finder.CreateDatabase.createDB.db" class="name">var <span class="ident">db</span></p>
+            <p id="coreset_finder.create_database.createDB.db" class="name">var <span class="ident">db</span></p>
             
 
             
@@ -1350,7 +1350,7 @@ The constructor generates 2 sparse matrices and zip between them</p></div>
           <h3>Methods</h3>
             
   <div class="item">
-    <div class="name def" id="coreset_finder.CreateDatabase.createDB.__init__">
+    <div class="name def" id="coreset_finder.create_database.createDB.__init__">
     <p>def <span class="ident">__init__</span>(</p><p>self, method_to_run)</p>
     </div>
     
@@ -1358,8 +1358,8 @@ The constructor generates 2 sparse matrices and zip between them</p></div>
     
   
   <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-coreset_finder.CreateDatabase.createDB.__init__', this);">Show source &equiv;</a></p>
-  <div id="source-coreset_finder.CreateDatabase.createDB.__init__" class="source">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-coreset_finder.create_database.createDB.__init__', this);">Show source &equiv;</a></p>
+  <div id="source-coreset_finder.create_database.createDB.__init__" class="source">
     <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">method_to_run</span><span class="p">):</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">_processChunkMethod</span> <span class="o">=</span> <span class="n">method_to_run</span>
     <span class="k">pass</span>
@@ -1372,7 +1372,7 @@ The constructor generates 2 sparse matrices and zip between them</p></div>
   
             
   <div class="item">
-    <div class="name def" id="coreset_finder.CreateDatabase.createDB.create_matrix">
+    <div class="name def" id="coreset_finder.create_database.createDB.create_matrix">
     <p>def <span class="ident">create_matrix</span>(</p><p>self, rows, cols)</p>
     </div>
     
@@ -1383,8 +1383,8 @@ The constructor generates 2 sparse matrices and zip between them</p></div>
 :param rows: given number of rows
 :param cols: given number of columns</p></div>
   <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-coreset_finder.CreateDatabase.createDB.create_matrix', this);">Show source &equiv;</a></p>
-  <div id="source-coreset_finder.CreateDatabase.createDB.create_matrix" class="source">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-coreset_finder.create_database.createDB.create_matrix', this);">Show source &equiv;</a></p>
+  <div id="source-coreset_finder.create_database.createDB.create_matrix" class="source">
     <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">create_matrix</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rows</span><span class="p">,</span> <span class="n">cols</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Generates 2 sparse matrices and zip between them</span>
@@ -1406,7 +1406,7 @@ The constructor generates 2 sparse matrices and zip between them</p></div>
   
             
   <div class="item">
-    <div class="name def" id="coreset_finder.CreateDatabase.createDB.generate_random_sparse_matrix">
+    <div class="name def" id="coreset_finder.create_database.createDB.generate_random_sparse_matrix">
     <p>def <span class="ident">generate_random_sparse_matrix</span>(</p><p>self, rows, cols, density)</p>
     </div>
     
@@ -1419,8 +1419,8 @@ The constructor generates 2 sparse matrices and zip between them</p></div>
 :param density: the density of values in the sparse matrix
 :return: the sparse matrix</p></div>
   <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-coreset_finder.CreateDatabase.createDB.generate_random_sparse_matrix', this);">Show source &equiv;</a></p>
-  <div id="source-coreset_finder.CreateDatabase.createDB.generate_random_sparse_matrix" class="source">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-coreset_finder.create_database.createDB.generate_random_sparse_matrix', this);">Show source &equiv;</a></p>
+  <div id="source-coreset_finder.create_database.createDB.generate_random_sparse_matrix" class="source">
     <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">generate_random_sparse_matrix</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rows</span><span class="p">,</span> <span class="n">cols</span><span class="p">,</span> <span class="n">density</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Generate a sparse matrix with random distribution</span>
@@ -1441,7 +1441,7 @@ The constructor generates 2 sparse matrices and zip between them</p></div>
   
             
   <div class="item">
-    <div class="name def" id="coreset_finder.CreateDatabase.createDB.generate_uniform_sparse_matrix">
+    <div class="name def" id="coreset_finder.create_database.createDB.generate_uniform_sparse_matrix">
     <p>def <span class="ident">generate_uniform_sparse_matrix</span>(</p><p>self, rows, cols, density)</p>
     </div>
     
@@ -1454,8 +1454,8 @@ The constructor generates 2 sparse matrices and zip between them</p></div>
 :param density: the density of values in the sparse matrix
 :return: the sparse matrix</p></div>
   <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-coreset_finder.CreateDatabase.createDB.generate_uniform_sparse_matrix', this);">Show source &equiv;</a></p>
-  <div id="source-coreset_finder.CreateDatabase.createDB.generate_uniform_sparse_matrix" class="source">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-coreset_finder.create_database.createDB.generate_uniform_sparse_matrix', this);">Show source &equiv;</a></p>
+  <div id="source-coreset_finder.create_database.createDB.generate_uniform_sparse_matrix" class="source">
     <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">generate_uniform_sparse_matrix</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rows</span><span class="p">,</span> <span class="n">cols</span><span class="p">,</span> <span class="n">density</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Generate a sparse matrix with uniform distribution</span>
@@ -1476,7 +1476,7 @@ The constructor generates 2 sparse matrices and zip between them</p></div>
   
             
   <div class="item">
-    <div class="name def" id="coreset_finder.CreateDatabase.createDB.read_from_csv">
+    <div class="name def" id="coreset_finder.create_database.createDB.read_from_csv">
     <p>def <span class="ident">read_from_csv</span>(</p><p>self, file_name, chunksize)</p>
     </div>
     
@@ -1488,8 +1488,8 @@ The method reads chunk by chunk from a CSV file and process it
 :param chunksize: given size of chunk to read from CSV
 :param file_name: given file name to read from</p></div>
   <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-coreset_finder.CreateDatabase.createDB.read_from_csv', this);">Show source &equiv;</a></p>
-  <div id="source-coreset_finder.CreateDatabase.createDB.read_from_csv" class="source">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-coreset_finder.create_database.createDB.read_from_csv', this);">Show source &equiv;</a></p>
+  <div id="source-coreset_finder.create_database.createDB.read_from_csv" class="source">
     <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">read_from_csv</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_name</span><span class="p">,</span> <span class="n">chunksize</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    The purpose of this method is to read from a given file and create an array from it</span>
@@ -1523,7 +1523,7 @@ The method reads chunk by chunk from a CSV file and process it
   
             
   <div class="item">
-    <div class="name def" id="coreset_finder.CreateDatabase.createDB.write_matrix_to_csv">
+    <div class="name def" id="coreset_finder.create_database.createDB.write_matrix_to_csv">
     <p>def <span class="ident">write_matrix_to_csv</span>(</p><p>self, file_name, array)</p>
     </div>
     
@@ -1534,8 +1534,8 @@ The method reads chunk by chunk from a CSV file and process it
 :param file_name: given file name to write into
 :param array: the written array</p></div>
   <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-coreset_finder.CreateDatabase.createDB.write_matrix_to_csv', this);">Show source &equiv;</a></p>
-  <div id="source-coreset_finder.CreateDatabase.createDB.write_matrix_to_csv" class="source">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-coreset_finder.create_database.createDB.write_matrix_to_csv', this);">Show source &equiv;</a></p>
+  <div id="source-coreset_finder.create_database.createDB.write_matrix_to_csv" class="source">
     <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">write_matrix_to_csv</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_name</span><span class="p">,</span> <span class="n">array</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    The purpose of this method is to write a given array into CSV file</span>

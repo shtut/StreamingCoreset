@@ -1041,24 +1041,23 @@ table {
 
     <li class="set"><h3><a href="#header-submodules">Sub-modules</a></h3>
       <ul>
-        <li class="mono"><a href="CreateDatabase.m.html">coreset_finder.CreateDatabase</a></li>
-        <li class="mono"><a href="StreamingClient.m.html">coreset_finder.StreamingClient</a></li>
-        <li class="mono"><a href="SummaryWorker.m.html">coreset_finder.SummaryWorker</a></li>
-        <li class="mono"><a href="WorkManager.m.html">coreset_finder.WorkManager</a></li>
         <li class="mono"><a href="array_util.m.html">coreset_finder.array_util</a></li>
-        <li class="mono"><a href="client_runner.m.html">coreset_finder.client_runner</a></li>
         <li class="mono"><a href="connection.m.html">coreset_finder.connection</a></li>
-        <li class="mono"><a href="connectionListener.m.html">coreset_finder.connectionListener</a></li>
         <li class="mono"><a href="connection_data.m.html">coreset_finder.connection_data</a></li>
+        <li class="mono"><a href="connection_listener.m.html">coreset_finder.connection_listener</a></li>
         <li class="mono"><a href="connection_util.m.html">coreset_finder.connection_util</a></li>
         <li class="mono"><a href="coreset_tree_algorithm.m.html">coreset_finder.coreset_tree_algorithm</a></li>
+        <li class="mono"><a href="create_database.m.html">coreset_finder.create_database</a></li>
         <li class="mono"><a href="message.m.html">coreset_finder.message</a></li>
         <li class="mono"><a href="message_codes.m.html">coreset_finder.message_codes</a></li>
         <li class="mono"><a href="server.m.html">coreset_finder.server</a></li>
         <li class="mono"><a href="server_runner.m.html">coreset_finder.server_runner</a></li>
-        <li class="mono"><a href="simpleCoreset.m.html">coreset_finder.simpleCoreset</a></li>
+        <li class="mono"><a href="simple_coreset.m.html">coreset_finder.simple_coreset</a></li>
         <li class="mono"><a href="stack.m.html">coreset_finder.stack</a></li>
+        <li class="mono"><a href="streaming_client.m.html">coreset_finder.streaming_client</a></li>
+        <li class="mono"><a href="summary_worker.m.html">coreset_finder.summary_worker</a></li>
         <li class="mono"><a href="summary_worker_runner.m.html">coreset_finder.summary_worker_runner</a></li>
+        <li class="mono"><a href="work_manager.m.html">coreset_finder.work_manager</a></li>
         <li class="mono"><a href="worker.m.html">coreset_finder.worker</a></li>
         <li class="mono"><a href="worker_runner.m.html">coreset_finder.worker_runner</a></li>
       </ul>
@@ -1086,50 +1085,10 @@ table {
 
     <h2 class="section-title" id="header-submodules">Sub-modules</h2>
       <div class="item">
-      <p class="name"><a href="CreateDatabase.m.html">coreset_finder.CreateDatabase</a></p>
-      
-  
-    <div class="desc"><p>Creates a csv file of a sparse matrix to be used as a database for the program.</p></div>
-
-      </div>
-      <div class="item">
-      <p class="name"><a href="StreamingClient.m.html">coreset_finder.StreamingClient</a></p>
-      
-  
-    <div class="desc"><p>Streaming client mimics the client.
-It generates the data and streams it to the server, then requests the summary.</p></div>
-
-      </div>
-      <div class="item">
-      <p class="name"><a href="SummaryWorker.m.html">coreset_finder.SummaryWorker</a></p>
-      
-  
-    <div class="desc"><p>The summary worker handles the creation of the final core-set.
-Holds a regular worker.</p></div>
-
-      </div>
-      <div class="item">
-      <p class="name"><a href="WorkManager.m.html">coreset_finder.WorkManager</a></p>
-      
-  
-    <div class="desc"><p>Simulates the entire working system.
-Sets a server, registers a number of workers (defined in the WorkManager constructor) and a summary worker, and connects a clients.</p>
-<p>The client creates a DB and sends the data to the server.
-Then it asks for the summary which the server provides, and exits.</p></div>
-
-      </div>
-      <div class="item">
       <p class="name"><a href="array_util.m.html">coreset_finder.array_util</a></p>
       
   
     <div class="desc"><p>Defines some helper functions for arrays- e.g. split to chunk size</p></div>
-
-      </div>
-      <div class="item">
-      <p class="name"><a href="client_runner.m.html">coreset_finder.client_runner</a></p>
-      
-  
-    <div class="desc"><p>Creates and runs a client.</p></div>
 
       </div>
       <div class="item">
@@ -1140,17 +1099,17 @@ Then it asks for the summary which the server provides, and exits.</p></div>
 
       </div>
       <div class="item">
-      <p class="name"><a href="connectionListener.m.html">coreset_finder.connectionListener</a></p>
-      
-  
-    <div class="desc"><p>Listens to a current connection</p></div>
-
-      </div>
-      <div class="item">
       <p class="name"><a href="connection_data.m.html">coreset_finder.connection_data</a></p>
       
   
     <div class="desc"><p>Defines the connection information:  Server IP, Worker port and Client port.</p></div>
+
+      </div>
+      <div class="item">
+      <p class="name"><a href="connection_listener.m.html">coreset_finder.connection_listener</a></p>
+      
+  
+    <div class="desc"><p>Listens to a current connection</p></div>
 
       </div>
       <div class="item">
@@ -1169,6 +1128,13 @@ Works by creating a binary tree, where each node is of size 'CORESET_SIZE'.
 The leaves are the original data, and each level above provides a smaller and better representation of the data.
 The root holds the best representation of all the leaves: the core-set.
 Has a config...</p></div>
+
+      </div>
+      <div class="item">
+      <p class="name"><a href="create_database.m.html">coreset_finder.create_database</a></p>
+      
+  
+    <div class="desc"><p>Creates a csv file of a sparse matrix to be used as a database for the program.</p></div>
 
       </div>
       <div class="item">
@@ -1202,7 +1168,7 @@ Upon request collects the unified core-set from all the workers and sends it bac
 
       </div>
       <div class="item">
-      <p class="name"><a href="simpleCoreset.m.html">coreset_finder.simpleCoreset</a></p>
+      <p class="name"><a href="simple_coreset.m.html">coreset_finder.simple_coreset</a></p>
       
   
     <div class="desc"><p>Provides a very simplistic method for merging nodes in the tree.
@@ -1217,10 +1183,36 @@ Contains a simple coreset algorithm - return a random portion of the data in siz
 
       </div>
       <div class="item">
+      <p class="name"><a href="streaming_client.m.html">coreset_finder.streaming_client</a></p>
+      
+  
+    <div class="desc"><p>Streaming client mimics the client.
+It generates the data and streams it to the server, then requests the summary.</p></div>
+
+      </div>
+      <div class="item">
+      <p class="name"><a href="summary_worker.m.html">coreset_finder.summary_worker</a></p>
+      
+  
+    <div class="desc"><p>The summary worker handles the creation of the final core-set.
+Holds a regular worker.</p></div>
+
+      </div>
+      <div class="item">
       <p class="name"><a href="summary_worker_runner.m.html">coreset_finder.summary_worker_runner</a></p>
       
   
     <div class="desc"><p>Creates and runs a summary worker.</p></div>
+
+      </div>
+      <div class="item">
+      <p class="name"><a href="work_manager.m.html">coreset_finder.work_manager</a></p>
+      
+  
+    <div class="desc"><p>Simulates the entire working system.
+Sets a server, registers a number of workers (defined in the WorkManager constructor) and a summary worker, and connects a clients.</p>
+<p>The client creates a DB and sends the data to the server.
+Then it asks for the summary which the server provides, and exits.</p></div>
 
       </div>
       <div class="item">

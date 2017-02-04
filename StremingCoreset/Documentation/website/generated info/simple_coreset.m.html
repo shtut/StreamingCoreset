@@ -3,9 +3,9 @@
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 
-    <title>coreset_finder.SummaryWorker API documentation</title>
-    <meta name="description" content="The summary worker handles the creation of the final core-set.
-Holds a regular worker." />
+    <title>coreset_finder.simple_coreset API documentation</title>
+    <meta name="description" content="Provides a very simplistic method for merging nodes in the tree.
+Contains a simple coreset algorithm..." />
 
   <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,300' rel='stylesheet' type='text/css'>
   
@@ -1042,12 +1042,13 @@ table {
     <li class="set"><h3><a href="#header-classes">Classes</a></h3>
       <ul>
         <li class="mono">
-        <span class="class_name"><a href="#coreset_finder.SummaryWorker.SummaryWorker">SummaryWorker</a></span>
+        <span class="class_name"><a href="#coreset_finder.simple_coreset.SimpleCoreset">SimpleCoreset</a></span>
         
           
   <ul>
-    <li class="mono"><a href="#coreset_finder.SummaryWorker.SummaryWorker.__init__">__init__</a></li>
-    <li class="mono"><a href="#coreset_finder.SummaryWorker.SummaryWorker.register_and_handle">register_and_handle</a></li>
+    <li class="mono"><a href="#coreset_finder.simple_coreset.SimpleCoreset.coreset_alg">coreset_alg</a></li>
+    <li class="mono"><a href="#coreset_finder.simple_coreset.SimpleCoreset.__init__">__init__</a></li>
+    <li class="mono"><a href="#coreset_finder.simple_coreset.SimpleCoreset.sample">sample</a></li>
   </ul>
 
         </li>
@@ -1065,26 +1066,34 @@ table {
 
 
   <header id="section-intro">
-  <h1 class="title"><span class="name">coreset_finder.SummaryWorker</span> module</h1>
-  <p>The summary worker handles the creation of the final core-set.
-Holds a regular worker.</p>
+  <h1 class="title"><span class="name">coreset_finder.simple_coreset</span> module</h1>
+  <p>Provides a very simplistic method for merging nodes in the tree.
+Contains a simple coreset algorithm - return a random portion of the data in size of coreSetSize</p>
   
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-coreset_finder.SummaryWorker', this);">Show source &equiv;</a></p>
-  <div id="source-coreset_finder.SummaryWorker" class="source">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-coreset_finder.simple_coreset', this);">Show source &equiv;</a></p>
+  <div id="source-coreset_finder.simple_coreset" class="source">
     <div class="codehilite"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">The summary worker handles the creation of the final core-set.</span>
-<span class="sd">Holds a regular worker.</span>
+<span class="sd">Provides a very simplistic method for merging nodes in the tree.</span>
+<span class="sd">Contains a simple coreset algorithm - return a random portion of the data in size of coreSetSize</span>
+
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="kn">from</span> <span class="nn">worker</span> <span class="kn">import</span> <span class="n">Worker</span>
-<span class="kn">import</span> <span class="nn">message_codes</span> <span class="kn">as</span> <span class="nn">codes</span>
+<span class="kn">import</span> <span class="nn">random</span>
 
+<span class="k">class</span> <span class="nc">SimpleCoreset</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    contains a simple coreset algorithm - return a random portion of the data</span>
+<span class="sd">    In size of coreSetSize</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_points</span> <span class="o">=</span> <span class="n">p</span>
 
-<span class="k">class</span> <span class="nc">SummaryWorker</span><span class="p">(</span><span class="n">Worker</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">server</span><span class="p">):</span>
-        <span class="n">Worker</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">server</span><span class="p">)</span>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">coreset_alg</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">w</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">SimpleCoreset</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">_worker_code</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">codes</span><span class="o">.</span><span class="n">REGISTER_SUMMARY_WORKER</span>
+    <span class="k">def</span> <span class="nf">sample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">coreSetSize</span><span class="p">):</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_points</span><span class="p">,</span> <span class="n">coreSetSize</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="bp">None</span>
 </pre></div>
 
   </div>
@@ -1097,18 +1106,29 @@ Holds a regular worker.</p>
     <h2 class="section-title" id="header-classes">Classes</h2>
       
       <div class="item">
-      <p id="coreset_finder.SummaryWorker.SummaryWorker" class="name">class <span class="ident">SummaryWorker</span></p>
+      <p id="coreset_finder.simple_coreset.SimpleCoreset" class="name">class <span class="ident">SimpleCoreset</span></p>
       
   
+    <div class="desc"><p>contains a simple coreset algorithm - return a random portion of the data
+In size of coreSetSize</p></div>
   <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-coreset_finder.SummaryWorker.SummaryWorker', this);">Show source &equiv;</a></p>
-  <div id="source-coreset_finder.SummaryWorker.SummaryWorker" class="source">
-    <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">SummaryWorker</span><span class="p">(</span><span class="n">Worker</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">server</span><span class="p">):</span>
-        <span class="n">Worker</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">server</span><span class="p">)</span>
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-coreset_finder.simple_coreset.SimpleCoreset', this);">Show source &equiv;</a></p>
+  <div id="source-coreset_finder.simple_coreset.SimpleCoreset" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">SimpleCoreset</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    contains a simple coreset algorithm - return a random portion of the data</span>
+<span class="sd">    In size of coreSetSize</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_points</span> <span class="o">=</span> <span class="n">p</span>
 
-    <span class="k">def</span> <span class="nf">_worker_code</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">codes</span><span class="o">.</span><span class="n">REGISTER_SUMMARY_WORKER</span>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">coreset_alg</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">w</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">SimpleCoreset</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">sample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">coreSetSize</span><span class="p">):</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_points</span><span class="p">,</span> <span class="n">coreSetSize</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="bp">None</span>
 </pre></div>
 
   </div>
@@ -1118,25 +1138,46 @@ Holds a regular worker.</p>
       <div class="class">
           <h3>Ancestors (in MRO)</h3>
           <ul class="class_list">
-          <li><a href="#coreset_finder.SummaryWorker.SummaryWorker">SummaryWorker</a></li>
-          <li>coreset_finder.worker.Worker</li>
-          <li>__builtin__.object</li>
+          <li><a href="#coreset_finder.simple_coreset.SimpleCoreset">SimpleCoreset</a></li>
           </ul>
-          <h3>Methods</h3>
+          <h3>Static methods</h3>
             
   <div class="item">
-    <div class="name def" id="coreset_finder.SummaryWorker.SummaryWorker.__init__">
-    <p>def <span class="ident">__init__</span>(</p><p>self, server)</p>
+    <div class="name def" id="coreset_finder.simple_coreset.SimpleCoreset.coreset_alg">
+    <p>def <span class="ident">coreset_alg</span>(</p><p>p, w)</p>
     </div>
     
 
     
   
   <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-coreset_finder.SummaryWorker.SummaryWorker.__init__', this);">Show source &equiv;</a></p>
-  <div id="source-coreset_finder.SummaryWorker.SummaryWorker.__init__" class="source">
-    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">server</span><span class="p">):</span>
-    <span class="n">Worker</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">server</span><span class="p">)</span>
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-coreset_finder.simple_coreset.SimpleCoreset.coreset_alg', this);">Show source &equiv;</a></p>
+  <div id="source-coreset_finder.simple_coreset.SimpleCoreset.coreset_alg" class="source">
+    <div class="codehilite"><pre><span></span><span class="nd">@staticmethod</span>
+<span class="k">def</span> <span class="nf">coreset_alg</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">w</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">SimpleCoreset</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+          <h3>Methods</h3>
+            
+  <div class="item">
+    <div class="name def" id="coreset_finder.simple_coreset.SimpleCoreset.__init__">
+    <p>def <span class="ident">__init__</span>(</p><p>self, p)</p>
+    </div>
+    
+
+    
+  
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-coreset_finder.simple_coreset.SimpleCoreset.__init__', this);">Show source &equiv;</a></p>
+  <div id="source-coreset_finder.simple_coreset.SimpleCoreset.__init__" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_points</span> <span class="o">=</span> <span class="n">p</span>
 </pre></div>
 
   </div>
@@ -1146,40 +1187,19 @@ Holds a regular worker.</p>
   
             
   <div class="item">
-    <div class="name def" id="coreset_finder.SummaryWorker.SummaryWorker.register_and_handle">
-    <p>def <span class="ident">register_and_handle</span>(</p><p>self)</p>
+    <div class="name def" id="coreset_finder.simple_coreset.SimpleCoreset.sample">
+    <p>def <span class="ident">sample</span>(</p><p>self, coreSetSize)</p>
     </div>
     
 
     
   
-    <div class="desc"><p>Registers with the server and enters the send/receive loop.</p>
-<p>Connects to the server and tries to register. If successfully it
-starts waiting for commands, otherwise it stops and reports an
-error.
-:return: -1 if fails</p></div>
   <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-coreset_finder.SummaryWorker.SummaryWorker.register_and_handle', this);">Show source &equiv;</a></p>
-  <div id="source-coreset_finder.SummaryWorker.SummaryWorker.register_and_handle" class="source">
-    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">register_and_handle</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Registers with the server and enters the send/receive loop.</span>
-<span class="sd">    Connects to the server and tries to register. If successfully it</span>
-<span class="sd">    starts waiting for commands, otherwise it stops and reports an</span>
-<span class="sd">    error.</span>
-<span class="sd">    :return: -1 if fails</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">server_connection</span> <span class="o">=</span> <span class="n">Connection</span><span class="p">()</span>
-    <span class="n">server_connection</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_server</span><span class="p">,</span> <span class="n">conn</span><span class="o">.</span><span class="n">worker_port</span><span class="p">)</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">_register_to_server</span><span class="p">(</span><span class="n">server_connection</span><span class="p">)</span>
-    <span class="n">message</span> <span class="o">=</span> <span class="n">server_connection</span><span class="o">.</span><span class="n">receive_message</span><span class="p">()</span>
-    <span class="n">command</span> <span class="o">=</span> <span class="n">message</span><span class="o">.</span><span class="n">code</span>
-    <span class="k">if</span> <span class="n">command</span> <span class="o">!=</span> <span class="n">codes</span><span class="o">.</span><span class="n">CONTINUE</span><span class="p">:</span>
-        <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Server sent </span><span class="si">%s</span><span class="s2">, but expected codes.CONTINUE!&quot;</span> <span class="o">%</span> <span class="n">command</span><span class="p">)</span>
-        <span class="n">server_connection</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-        <span class="k">return</span> <span class="o">-</span><span class="mi">1</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">_handle_commands</span><span class="p">(</span><span class="n">server_connection</span><span class="p">)</span>
-    <span class="n">server_connection</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-coreset_finder.simple_coreset.SimpleCoreset.sample', this);">Show source &equiv;</a></p>
+  <div id="source-coreset_finder.simple_coreset.SimpleCoreset.sample" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">sample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">coreSetSize</span><span class="p">):</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_points</span><span class="p">,</span> <span class="n">coreSetSize</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="bp">None</span>
 </pre></div>
 
   </div>

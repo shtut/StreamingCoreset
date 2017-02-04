@@ -3,7 +3,7 @@
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 
-    <title>coreset_finder.WorkManager API documentation</title>
+    <title>coreset_finder.work_manager API documentation</title>
     <meta name="description" content="Simulates the entire working system.
 Sets a server, registers a number of workers (defined in the Wo..." />
 
@@ -1041,7 +1041,7 @@ table {
     <li class="set"><h3><a href="#header-functions">Functions</a></h3>
       
   <ul>
-    <li class="mono"><a href="#coreset_finder.WorkManager.kill_process">kill_process</a></li>
+    <li class="mono"><a href="#coreset_finder.work_manager.kill_process">kill_process</a></li>
   </ul>
 
     </li>
@@ -1049,12 +1049,12 @@ table {
     <li class="set"><h3><a href="#header-classes">Classes</a></h3>
       <ul>
         <li class="mono">
-        <span class="class_name"><a href="#coreset_finder.WorkManager.WorkManager">WorkManager</a></span>
+        <span class="class_name"><a href="#coreset_finder.work_manager.WorkManager">WorkManager</a></span>
         
           
   <ul>
-    <li class="mono"><a href="#coreset_finder.WorkManager.WorkManager.__init__">__init__</a></li>
-    <li class="mono"><a href="#coreset_finder.WorkManager.WorkManager.main">main</a></li>
+    <li class="mono"><a href="#coreset_finder.work_manager.WorkManager.__init__">__init__</a></li>
+    <li class="mono"><a href="#coreset_finder.work_manager.WorkManager.main">main</a></li>
   </ul>
 
         </li>
@@ -1072,14 +1072,14 @@ table {
 
 
   <header id="section-intro">
-  <h1 class="title"><span class="name">coreset_finder.WorkManager</span> module</h1>
+  <h1 class="title"><span class="name">coreset_finder.work_manager</span> module</h1>
   <p>Simulates the entire working system.
 Sets a server, registers a number of workers (defined in the WorkManager constructor) and a summary worker, and connects a clients.</p>
 <p>The client creates a DB and sends the data to the server.
 Then it asks for the summary which the server provides, and exits.</p>
   
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-coreset_finder.WorkManager', this);">Show source &equiv;</a></p>
-  <div id="source-coreset_finder.WorkManager" class="source">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-coreset_finder.work_manager', this);">Show source &equiv;</a></p>
+  <div id="source-coreset_finder.work_manager" class="source">
     <div class="codehilite"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">Simulates the entire working system.</span>
 <span class="sd">Sets a server, registers a number of workers (defined in the WorkManager constructor) and a summary worker, and connects a clients.</span>
@@ -1091,10 +1091,10 @@ Then it asks for the summary which the server provides, and exits.</p>
 <span class="kn">import</span> <span class="nn">time</span>
 <span class="kn">from</span> <span class="nn">threading</span> <span class="kn">import</span> <span class="n">Thread</span>
 <span class="kn">import</span> <span class="nn">psutil</span>
-<span class="kn">from</span> <span class="nn">StreamingClient</span> <span class="kn">import</span> <span class="n">Client</span>
-<span class="kn">from</span> <span class="nn">SummaryWorker</span> <span class="kn">import</span> <span class="n">SummaryWorker</span>
+<span class="kn">from</span> <span class="nn">streaming_client</span> <span class="kn">import</span> <span class="n">Client</span>
+<span class="kn">from</span> <span class="nn">summary_worker</span> <span class="kn">import</span> <span class="n">SummaryWorker</span>
 <span class="kn">import</span> <span class="nn">connection_data</span> <span class="kn">as</span> <span class="nn">conn</span>
-<span class="kn">from</span> <span class="nn">coreset_finder.server</span> <span class="kn">import</span> <span class="n">Server</span>
+<span class="kn">from</span> <span class="nn">server</span> <span class="kn">import</span> <span class="n">Server</span>
 <span class="kn">from</span> <span class="nn">worker</span> <span class="kn">import</span> <span class="n">Worker</span>
 
 
@@ -1187,7 +1187,7 @@ Then it asks for the summary which the server provides, and exits.</p>
     <h2 class="section-title" id="header-functions">Functions</h2>
       
   <div class="item">
-    <div class="name def" id="coreset_finder.WorkManager.kill_process">
+    <div class="name def" id="coreset_finder.work_manager.kill_process">
     <p>def <span class="ident">kill_process</span>(</p><p>process_name)</p>
     </div>
     
@@ -1198,8 +1198,8 @@ Then it asks for the summary which the server provides, and exits.</p>
 :param process_name: process name
 :return: None</p></div>
   <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-coreset_finder.WorkManager.kill_process', this);">Show source &equiv;</a></p>
-  <div id="source-coreset_finder.WorkManager.kill_process" class="source">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-coreset_finder.work_manager.kill_process', this);">Show source &equiv;</a></p>
+  <div id="source-coreset_finder.work_manager.kill_process" class="source">
     <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">kill_process</span><span class="p">(</span><span class="n">process_name</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    given process name, kills the process</span>
@@ -1221,12 +1221,12 @@ Then it asks for the summary which the server provides, and exits.</p>
     <h2 class="section-title" id="header-classes">Classes</h2>
       
       <div class="item">
-      <p id="coreset_finder.WorkManager.WorkManager" class="name">class <span class="ident">WorkManager</span></p>
+      <p id="coreset_finder.work_manager.WorkManager" class="name">class <span class="ident">WorkManager</span></p>
       
   
   <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-coreset_finder.WorkManager.WorkManager', this);">Show source &equiv;</a></p>
-  <div id="source-coreset_finder.WorkManager.WorkManager" class="source">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-coreset_finder.work_manager.WorkManager', this);">Show source &equiv;</a></p>
+  <div id="source-coreset_finder.work_manager.WorkManager" class="source">
     <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">WorkManager</span><span class="p">:</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">workers_num</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_workers_num</span> <span class="o">=</span> <span class="n">workers_num</span>
@@ -1283,11 +1283,11 @@ Then it asks for the summary which the server provides, and exits.</p>
       <div class="class">
           <h3>Ancestors (in MRO)</h3>
           <ul class="class_list">
-          <li><a href="#coreset_finder.WorkManager.WorkManager">WorkManager</a></li>
+          <li><a href="#coreset_finder.work_manager.WorkManager">WorkManager</a></li>
           </ul>
           <h3>Instance variables</h3>
             <div class="item">
-            <p id="coreset_finder.WorkManager.WorkManager.number_of_workers" class="name">var <span class="ident">number_of_workers</span></p>
+            <p id="coreset_finder.work_manager.WorkManager.number_of_workers" class="name">var <span class="ident">number_of_workers</span></p>
             
 
             
@@ -1301,7 +1301,7 @@ Then it asks for the summary which the server provides, and exits.</p>
           <h3>Methods</h3>
             
   <div class="item">
-    <div class="name def" id="coreset_finder.WorkManager.WorkManager.__init__">
+    <div class="name def" id="coreset_finder.work_manager.WorkManager.__init__">
     <p>def <span class="ident">__init__</span>(</p><p>self, workers_num)</p>
     </div>
     
@@ -1309,8 +1309,8 @@ Then it asks for the summary which the server provides, and exits.</p>
     
   
   <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-coreset_finder.WorkManager.WorkManager.__init__', this);">Show source &equiv;</a></p>
-  <div id="source-coreset_finder.WorkManager.WorkManager.__init__" class="source">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-coreset_finder.work_manager.WorkManager.__init__', this);">Show source &equiv;</a></p>
+  <div id="source-coreset_finder.work_manager.WorkManager.__init__" class="source">
     <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">workers_num</span><span class="p">):</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">_workers_num</span> <span class="o">=</span> <span class="n">workers_num</span>
     <span class="k">pass</span>
@@ -1323,7 +1323,7 @@ Then it asks for the summary which the server provides, and exits.</p>
   
             
   <div class="item">
-    <div class="name def" id="coreset_finder.WorkManager.WorkManager.main">
+    <div class="name def" id="coreset_finder.work_manager.WorkManager.main">
     <p>def <span class="ident">main</span>(</p><p>self)</p>
     </div>
     
@@ -1333,8 +1333,8 @@ Then it asks for the summary which the server provides, and exits.</p>
     <div class="desc"><p>starts the server, registers workers and runs the client
 :return:</p></div>
   <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-coreset_finder.WorkManager.WorkManager.main', this);">Show source &equiv;</a></p>
-  <div id="source-coreset_finder.WorkManager.WorkManager.main" class="source">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-coreset_finder.work_manager.WorkManager.main', this);">Show source &equiv;</a></p>
+  <div id="source-coreset_finder.work_manager.WorkManager.main" class="source">
     <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">main</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    starts the server, registers workers and runs the client</span>

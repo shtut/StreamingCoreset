@@ -3,8 +3,9 @@
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 
-    <title>coreset_finder.connectionListener API documentation</title>
-    <meta name="description" content="Listens to a current connection" />
+    <title>coreset_finder.summary_worker API documentation</title>
+    <meta name="description" content="The summary worker handles the creation of the final core-set.
+Holds a regular worker." />
 
   <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,300' rel='stylesheet' type='text/css'>
   
@@ -1041,12 +1042,12 @@ table {
     <li class="set"><h3><a href="#header-classes">Classes</a></h3>
       <ul>
         <li class="mono">
-        <span class="class_name"><a href="#coreset_finder.connectionListener.ConnectionListener">ConnectionListener</a></span>
+        <span class="class_name"><a href="#coreset_finder.summary_worker.SummaryWorker">SummaryWorker</a></span>
         
           
   <ul>
-    <li class="mono"><a href="#coreset_finder.connectionListener.ConnectionListener.__init__">__init__</a></li>
-    <li class="mono"><a href="#coreset_finder.connectionListener.ConnectionListener.accept">accept</a></li>
+    <li class="mono"><a href="#coreset_finder.summary_worker.SummaryWorker.__init__">__init__</a></li>
+    <li class="mono"><a href="#coreset_finder.summary_worker.SummaryWorker.register_and_handle">register_and_handle</a></li>
   </ul>
 
         </li>
@@ -1064,30 +1065,26 @@ table {
 
 
   <header id="section-intro">
-  <h1 class="title"><span class="name">coreset_finder.connectionListener</span> module</h1>
-  <p>Listens to a current connection</p>
+  <h1 class="title"><span class="name">coreset_finder.summary_worker</span> module</h1>
+  <p>The summary worker handles the creation of the final core-set.
+Holds a regular worker.</p>
   
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-coreset_finder.connectionListener', this);">Show source &equiv;</a></p>
-  <div id="source-coreset_finder.connectionListener" class="source">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-coreset_finder.summary_worker', this);">Show source &equiv;</a></p>
+  <div id="source-coreset_finder.summary_worker" class="source">
     <div class="codehilite"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">Listens to a current connection</span>
+<span class="sd">The summary worker handles the creation of the final core-set.</span>
+<span class="sd">Holds a regular worker.</span>
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="kn">import</span> <span class="nn">socket</span>
-<span class="kn">from</span> <span class="nn">connection</span> <span class="kn">import</span> <span class="n">Connection</span>
+<span class="kn">from</span> <span class="nn">worker</span> <span class="kn">import</span> <span class="n">Worker</span>
+<span class="kn">import</span> <span class="nn">message_codes</span> <span class="kn">as</span> <span class="nn">codes</span>
 
 
-<span class="k">class</span> <span class="nc">ConnectionListener</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">server_name</span><span class="p">,</span> <span class="n">port</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">connection_socket</span> <span class="o">=</span> <span class="n">socket</span><span class="o">.</span><span class="n">socket</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">AF_INET</span><span class="p">,</span> <span class="n">socket</span><span class="o">.</span><span class="n">SOCK_STREAM</span><span class="p">)</span>
-        <span class="n">server_address</span> <span class="o">=</span> <span class="p">(</span><span class="n">server_name</span><span class="p">,</span> <span class="n">port</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">connection_socket</span><span class="o">.</span><span class="n">setsockopt</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">SOL_SOCKET</span><span class="p">,</span> <span class="n">socket</span><span class="o">.</span><span class="n">SO_REUSEADDR</span><span class="p">,</span> <span class="bp">True</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">connection_socket</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="n">server_address</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">connection_socket</span><span class="o">.</span><span class="n">listen</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">SummaryWorker</span><span class="p">(</span><span class="n">Worker</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">server</span><span class="p">):</span>
+        <span class="n">Worker</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">server</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">accept</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">connection</span> <span class="o">=</span> <span class="n">Connection</span><span class="p">()</span>
-        <span class="n">connection</span><span class="o">.</span><span class="n">_socket</span><span class="p">,</span> <span class="n">connection</span><span class="o">.</span><span class="n">_address</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">connection_socket</span><span class="o">.</span><span class="n">accept</span><span class="p">()</span>
-        <span class="k">return</span> <span class="n">connection</span>
+    <span class="k">def</span> <span class="nf">_worker_code</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">codes</span><span class="o">.</span><span class="n">REGISTER_SUMMARY_WORKER</span>
 </pre></div>
 
   </div>
@@ -1100,24 +1097,18 @@ table {
     <h2 class="section-title" id="header-classes">Classes</h2>
       
       <div class="item">
-      <p id="coreset_finder.connectionListener.ConnectionListener" class="name">class <span class="ident">ConnectionListener</span></p>
+      <p id="coreset_finder.summary_worker.SummaryWorker" class="name">class <span class="ident">SummaryWorker</span></p>
       
   
   <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-coreset_finder.connectionListener.ConnectionListener', this);">Show source &equiv;</a></p>
-  <div id="source-coreset_finder.connectionListener.ConnectionListener" class="source">
-    <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">ConnectionListener</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">server_name</span><span class="p">,</span> <span class="n">port</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">connection_socket</span> <span class="o">=</span> <span class="n">socket</span><span class="o">.</span><span class="n">socket</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">AF_INET</span><span class="p">,</span> <span class="n">socket</span><span class="o">.</span><span class="n">SOCK_STREAM</span><span class="p">)</span>
-        <span class="n">server_address</span> <span class="o">=</span> <span class="p">(</span><span class="n">server_name</span><span class="p">,</span> <span class="n">port</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">connection_socket</span><span class="o">.</span><span class="n">setsockopt</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">SOL_SOCKET</span><span class="p">,</span> <span class="n">socket</span><span class="o">.</span><span class="n">SO_REUSEADDR</span><span class="p">,</span> <span class="bp">True</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">connection_socket</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="n">server_address</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">connection_socket</span><span class="o">.</span><span class="n">listen</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-coreset_finder.summary_worker.SummaryWorker', this);">Show source &equiv;</a></p>
+  <div id="source-coreset_finder.summary_worker.SummaryWorker" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">SummaryWorker</span><span class="p">(</span><span class="n">Worker</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">server</span><span class="p">):</span>
+        <span class="n">Worker</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">server</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">accept</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">connection</span> <span class="o">=</span> <span class="n">Connection</span><span class="p">()</span>
-        <span class="n">connection</span><span class="o">.</span><span class="n">_socket</span><span class="p">,</span> <span class="n">connection</span><span class="o">.</span><span class="n">_address</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">connection_socket</span><span class="o">.</span><span class="n">accept</span><span class="p">()</span>
-        <span class="k">return</span> <span class="n">connection</span>
+    <span class="k">def</span> <span class="nf">_worker_code</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">codes</span><span class="o">.</span><span class="n">REGISTER_SUMMARY_WORKER</span>
 </pre></div>
 
   </div>
@@ -1127,39 +1118,25 @@ table {
       <div class="class">
           <h3>Ancestors (in MRO)</h3>
           <ul class="class_list">
-          <li><a href="#coreset_finder.connectionListener.ConnectionListener">ConnectionListener</a></li>
+          <li><a href="#coreset_finder.summary_worker.SummaryWorker">SummaryWorker</a></li>
+          <li>coreset_finder.worker.Worker</li>
           <li>__builtin__.object</li>
           </ul>
-          <h3>Instance variables</h3>
-            <div class="item">
-            <p id="coreset_finder.connectionListener.ConnectionListener.connection_socket" class="name">var <span class="ident">connection_socket</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
           <h3>Methods</h3>
             
   <div class="item">
-    <div class="name def" id="coreset_finder.connectionListener.ConnectionListener.__init__">
-    <p>def <span class="ident">__init__</span>(</p><p>self, server_name, port)</p>
+    <div class="name def" id="coreset_finder.summary_worker.SummaryWorker.__init__">
+    <p>def <span class="ident">__init__</span>(</p><p>self, server)</p>
     </div>
     
 
     
   
   <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-coreset_finder.connectionListener.ConnectionListener.__init__', this);">Show source &equiv;</a></p>
-  <div id="source-coreset_finder.connectionListener.ConnectionListener.__init__" class="source">
-    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">server_name</span><span class="p">,</span> <span class="n">port</span><span class="p">):</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">connection_socket</span> <span class="o">=</span> <span class="n">socket</span><span class="o">.</span><span class="n">socket</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">AF_INET</span><span class="p">,</span> <span class="n">socket</span><span class="o">.</span><span class="n">SOCK_STREAM</span><span class="p">)</span>
-    <span class="n">server_address</span> <span class="o">=</span> <span class="p">(</span><span class="n">server_name</span><span class="p">,</span> <span class="n">port</span><span class="p">)</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">connection_socket</span><span class="o">.</span><span class="n">setsockopt</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">SOL_SOCKET</span><span class="p">,</span> <span class="n">socket</span><span class="o">.</span><span class="n">SO_REUSEADDR</span><span class="p">,</span> <span class="bp">True</span><span class="p">)</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">connection_socket</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="n">server_address</span><span class="p">)</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">connection_socket</span><span class="o">.</span><span class="n">listen</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-coreset_finder.summary_worker.SummaryWorker.__init__', this);">Show source &equiv;</a></p>
+  <div id="source-coreset_finder.summary_worker.SummaryWorker.__init__" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">server</span><span class="p">):</span>
+    <span class="n">Worker</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">server</span><span class="p">)</span>
 </pre></div>
 
   </div>
@@ -1169,20 +1146,40 @@ table {
   
             
   <div class="item">
-    <div class="name def" id="coreset_finder.connectionListener.ConnectionListener.accept">
-    <p>def <span class="ident">accept</span>(</p><p>self)</p>
+    <div class="name def" id="coreset_finder.summary_worker.SummaryWorker.register_and_handle">
+    <p>def <span class="ident">register_and_handle</span>(</p><p>self)</p>
     </div>
     
 
     
   
+    <div class="desc"><p>Registers with the server and enters the send/receive loop.</p>
+<p>Connects to the server and tries to register. If successfully it
+starts waiting for commands, otherwise it stops and reports an
+error.
+:return: -1 if fails</p></div>
   <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-coreset_finder.connectionListener.ConnectionListener.accept', this);">Show source &equiv;</a></p>
-  <div id="source-coreset_finder.connectionListener.ConnectionListener.accept" class="source">
-    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">accept</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-    <span class="n">connection</span> <span class="o">=</span> <span class="n">Connection</span><span class="p">()</span>
-    <span class="n">connection</span><span class="o">.</span><span class="n">_socket</span><span class="p">,</span> <span class="n">connection</span><span class="o">.</span><span class="n">_address</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">connection_socket</span><span class="o">.</span><span class="n">accept</span><span class="p">()</span>
-    <span class="k">return</span> <span class="n">connection</span>
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-coreset_finder.summary_worker.SummaryWorker.register_and_handle', this);">Show source &equiv;</a></p>
+  <div id="source-coreset_finder.summary_worker.SummaryWorker.register_and_handle" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">register_and_handle</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Registers with the server and enters the send/receive loop.</span>
+<span class="sd">    Connects to the server and tries to register. If successfully it</span>
+<span class="sd">    starts waiting for commands, otherwise it stops and reports an</span>
+<span class="sd">    error.</span>
+<span class="sd">    :return: -1 if fails</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">server_connection</span> <span class="o">=</span> <span class="n">Connection</span><span class="p">()</span>
+    <span class="n">server_connection</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_server</span><span class="p">,</span> <span class="n">conn</span><span class="o">.</span><span class="n">worker_port</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_register_to_server</span><span class="p">(</span><span class="n">server_connection</span><span class="p">)</span>
+    <span class="n">message</span> <span class="o">=</span> <span class="n">server_connection</span><span class="o">.</span><span class="n">receive_message</span><span class="p">()</span>
+    <span class="n">command</span> <span class="o">=</span> <span class="n">message</span><span class="o">.</span><span class="n">code</span>
+    <span class="k">if</span> <span class="n">command</span> <span class="o">!=</span> <span class="n">codes</span><span class="o">.</span><span class="n">CONTINUE</span><span class="p">:</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Server sent </span><span class="si">%s</span><span class="s2">, but expected codes.CONTINUE!&quot;</span> <span class="o">%</span> <span class="n">command</span><span class="p">)</span>
+        <span class="n">server_connection</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="k">return</span> <span class="o">-</span><span class="mi">1</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_handle_commands</span><span class="p">(</span><span class="n">server_connection</span><span class="p">)</span>
+    <span class="n">server_connection</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 </pre></div>
 
   </div>
