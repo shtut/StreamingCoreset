@@ -12,7 +12,7 @@ import psutil
 from streaming_client import Client
 from summary_worker import SummaryWorker
 import connection_data as conn
-from coreset_finder.server import Server
+from server import Server
 from worker import Worker
 
 
