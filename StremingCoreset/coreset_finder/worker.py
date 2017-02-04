@@ -12,7 +12,7 @@ import connection_data as conn
 import message_codes as codes
 from connection import Connection
 from message import Message
-from simpleCoreset import SimpleCoreset
+from simple_coreset import SimpleCoreset
 from coreset_tree_algorithm import CoresetTeeAlgorithm
 
 log.basicConfig(filename='worker.log', level=log.DEBUG)
