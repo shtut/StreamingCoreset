@@ -1,7 +1,7 @@
 """
 Creates and runs a summary worker.
 """
-from SummaryWorker import SummaryWorker
+from summary_worker import SummaryWorker
 import sys
 
 #starts up the worker
