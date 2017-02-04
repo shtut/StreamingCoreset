@@ -9,8 +9,8 @@ import sys
 import time
 from threading import Thread
 import psutil
-from StreamingClient import Client
-from SummaryWorker import SummaryWorker
+from streaming_client import Client
+from summary_worker import SummaryWorker
 import connection_data as conn
 from coreset_finder.server import Server
 from worker import Worker
