@@ -17,7 +17,7 @@ from coreset_tree_algorithm import CoresetTeeAlgorithm
 
 log.basicConfig(filename='worker.log', level=log.DEBUG)
 MAX_RANDOM_NUMBER = 2000
-CORESET_SIZE = 10
+CORESET_SIZE = 2
 CORSET_ALGORITHM = SimpleCoreset.coreset_alg
 
 
@@ -68,7 +68,7 @@ class Worker(object):
             command = message.code
             log.debug("Received command %s" % command)
             if command == codes.ADD_POINTS:
-                self._new_points(message.points)
+                self._new_points(message.points, message.weights)
             elif command == codes.GET_UNIFIED:
                 self._get_summary(server_connection)
             elif command == codes.TERMINATE:
@@ -88,9 +88,9 @@ class Worker(object):
         except socket.error:
             sys.exit()
 
-    def _new_points(self, points):
+    def _new_points(self, points, weights):
         data = util.convert_points_to_float(points)
-        self._coresetTreeBuilder.add_points(data)
+        self._coresetTreeBuilder.add_points(data, weights)
         print "Got a new matrix", data.shape
 
     def _get_summary(self, server_connection):
@@ -100,7 +100,7 @@ class Worker(object):
         :return: none
         """
         summary = self._coresetTreeBuilder.get_unified_coreset()
-        log.debug("Sending the summary to the server %s" % summary)
+        # log.debug("Sending the summary to the server %s" % summary)
         server_connection.send_message(Message(codes.SENDING, summary))
         print "Summary sent to the server. Going back to the loop."
 

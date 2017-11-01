@@ -21,9 +21,10 @@ log.basicConfig(filename='server.log', level=log.DEBUG)
 
 
 class Server(object):
-    CHUNK_SIZE = 100
+    CHUNK_SIZE = 2
 
     def __init__(self, server_name):
+        # self._received_weights = []
         self._server_name = server_name
         self._registered_workers = []
         self._summary_worker = None
@@ -111,8 +112,8 @@ class Server(object):
         log.debug("Sent %s points to worker %s" % (data.shape[0], worker_connection))
 
     @staticmethod
-    def _send_data_to_worker(data, worker_connection):
-        return worker_connection.send_message(Message(codes.ADD_POINTS, data))
+    def _send_data_to_worker(data, worker_connection , weights = None):
+        return worker_connection.send_message(Message(codes.ADD_POINTS, data, weights))
 
     def _worker_thread(self, worker_connection):
         worker_connection.send_message(Message(codes.CONTINUE))
@@ -124,6 +125,7 @@ class Server(object):
             elif command == codes.SENDING:
                 log.debug("Worker is sending points as requested.")
                 self._received_points.append(message.points)
+                # self._received_weights.append(message.weights)
             elif command == codes.TERMINATE:
                 log.error("worker has died")
                 break
@@ -187,24 +189,47 @@ class Server(object):
         # remove leftover received from workers
         temp = self._received_points[:]
         for points_list in temp:
-            if points_list is None:
+            if points_list.points is None:
                 self._received_points.remove(points_list)
 
-        points = np.vstack(self._received_points)
+        # # remove leftover received from workers
+        # temp = self._received_weights[:]
+        # for weights_list in temp:
+        #     if weights_list is None:
+        #         self._received_weights.remove(weights_list)
+        points = None
+        weights = None
+
+        for pts in self._received_points:
+            if points is None:
+                points = pts.points
+            if weights is None:
+                weights = pts.weights
+            else:
+                points = np.vstack((points, pts.points))
+                weights = np.hstack((weights, pts.weights))
+        # points = np.vstack(self._received_points[0].points)
+        # weights = np.vstack(self._received_points[0].weights)
 
         # clearing received data cache
         self._received_points = []
+        # self._received_weights = []
+
         # sending all 'final results' to summary worker
-        self._send_data_to_worker(points, self._summary_worker)
+        self._send_data_to_worker(points, self._summary_worker , weights)
         self._summary_worker.send_message(Message(codes.GET_UNIFIED))
 
         # wait for summary points
         self._wait_for_results(1)
 
-        summary_points = np.vstack(self._received_points)
-        client_connection.send_message(Message(codes.SENDING, summary_points))
+        summary_points = np.vstack(self._received_points[0].points)
+        summary_weights = np.hstack(self._received_points[0].weights)
+        print "server:"
+        print self._received_points[0]
+        client_connection.send_message(Message(codes.SENDING, summary_points , summary_weights))
 
         del self._received_points[:]
+        # del self._received_weights[:]
 
     def _obtain_workers_results(self):
         self._request_workers_results()

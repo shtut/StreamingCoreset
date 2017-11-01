@@ -7,7 +7,7 @@ import array_util as arr_util
 import message_codes as codes
 from message import Message
 
-PACKET_SIZE = 2000
+PACKET_SIZE = 2
 
 
 class Connection(object):

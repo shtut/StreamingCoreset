@@ -10,6 +10,7 @@ import message_codes as codes
 from create_database import createDB
 from connection import Connection
 from message import Message
+import os
 
 
 def _print_server_response_code(code):
@@ -26,16 +27,31 @@ class Client:
         self._server = server
         self._connection = Connection()
 
-    def run_client(self):
+    def run_client(self, path):
         """
         starts the client. creates a database and sends it to the server,  then asks for the summary (coreset)
         :return:
         """
         self._connect_server()
         db = createDB(self._process_chunk)
-        db.read_from_csv('alice.csv', 100)
+        csv_files = self.find_csv_filenames(path)
+        for file in csv_files:
+            db.read_from_csv(path, file, 100)
         time.sleep(1)
         self.get_summary_points()
+
+    def find_csv_filenames(self, path, suffix=".csv"):
+        """
+        Return a list of file names with given suffix in specific path
+        The list is sorted by creation time
+        :param path: given path to files names
+        :param suffix: suffix of files to look for, by default ".csv"
+        :return:sorted strings list of file names sorted by creation time
+        """
+        fileNames = os.listdir(path)
+        # sort file on creation time
+        fileNames.sort(key=lambda x: os.stat(os.path.join(path, x)).st_ctime )
+        return [filename for filename in fileNames if filename.endswith(suffix)]
 
     def get_summary_points(self):
         """
@@ -45,8 +61,12 @@ class Client:
         print "Getting the summary..."
         self._connection.send_message(Message(codes.GET_UNIFIED))
         message = self._connection.receive_message()
-        data = message.points
-        print "Received the summary:\n %s" % data
+        data = [message.points, message.weights]
+        print "Received the summary:\n"
+        print "Points:\n %s" % data[0]
+        print "Weights:\n %s" % data[1]
+        db = createDB(self._process_chunk)
+        db.write_matrix_to_csv('dielout.csv', data)
 
     def _connect_server(self):
         """

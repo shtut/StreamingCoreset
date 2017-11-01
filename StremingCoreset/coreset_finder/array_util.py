@@ -15,6 +15,7 @@ def array_split(points, size):
     start_index = 0
     end_index = size
     arr = []
+
     while end_index <= len(points):
         arr.append(points[start_index:end_index])
         start_index += size
@@ -31,6 +32,7 @@ def convert_points_to_float(matrix):
     :return: float matrix
     """
     res = None
+
     for line in matrix:
         new_line = []
         for v in line:

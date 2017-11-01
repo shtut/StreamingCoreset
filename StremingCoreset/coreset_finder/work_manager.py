@@ -49,8 +49,9 @@ class WorkManager:
 
     @staticmethod
     def _run_client():
+        path = 'C:\Users\Hadas\Dropbox\coreset_finder_weights\coreset_finder\iterable'
         client = Client(conn.server_ip)
-        client.run_client()
+        client.run_client(path)
 
     @staticmethod
     def _start_summary_worker():

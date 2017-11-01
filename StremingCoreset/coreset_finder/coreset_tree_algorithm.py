@@ -6,6 +6,7 @@ The root holds the best representation of all the leaves: the core-set.
 Has a configurable merging algorithm - 'CORESET-ALGORITHM'.
 """
 
+from scipy import sparse
 from collections import namedtuple
 import numpy as np
 from stack import Stack
@@ -16,7 +17,6 @@ WeightedPointSet = namedtuple("WeightedPointSet", "points weights")
 
 
 class CoresetTeeAlgorithm(object):
-
     def __init__(self, coreset_alg, coreset_size):
         """
         constructor
@@ -28,22 +28,32 @@ class CoresetTeeAlgorithm(object):
         self._coreset_size = coreset_size
         self._data = Stack()
 
-    def add_points(self, points):
+    def add_points(self, points, weights):
         """
         Adds a set of points to the stream.
 
         If the set is larger than coreset_size, it is split
         into several sets and a coreset is constructed on each set.
+        :param weights:
         :param points: input data
         :return: none
         """
         if points.size == 0:
             return
-        for split in utils.array_split(points, self._coreset_size):
-            if len(split) == self._coreset_size:
-                self._add_leaf(split)
-            elif len(split) != 0:
-                self._add_leftovers(split)
+        if weights is None:
+            weights = np.ones_like(points.T[0])
+
+        split_points = utils.array_split(points, self._coreset_size)
+        split_weights = utils.array_split(weights, self._coreset_size)
+
+        for p,w in zip(split_points,split_weights):
+            if len(p) == self._coreset_size:
+                print "split pts and weights:"
+                print p
+                print w
+                self._add_leaf(p, w)
+            else:
+                self._add_leftovers(p, w)
 
     def get_unified_coreset(self):
         """
@@ -52,6 +62,7 @@ class CoresetTeeAlgorithm(object):
         """
         current_data = self._data.list()
         res = None
+        weights = None
         solution = None
         self._print_tree_data(current_data)
 
@@ -59,11 +70,12 @@ class CoresetTeeAlgorithm(object):
 
         if solution is not None:
             res = solution.points
+            weights = solution.weights
 
-        return res
+        return WeightedPointSet(res, weights)
 
-    def _add_leaf(self, points):
-        self._insert_into_tree(WeightedPointSet(points, None))
+    def _add_leaf(self, points, weights):
+        self._insert_into_tree(WeightedPointSet(points, weights))
 
     def _insert_into_tree(self, coreset):
         level = 1
@@ -86,19 +98,21 @@ class CoresetTeeAlgorithm(object):
     def _merge(self, set1, set2):
         points = np.vstack([set1.points, set2.points])
         weights = np.hstack([set1.weights, set2.weights])
-        return self._activate_coreset_alg(points, weights)
+        return self._activate_coreset_alg(points,weights)
 
     def _activate_coreset_alg(self, points, weights):
         alg = self._coreset_alg(points, weights)
-        coreset, coreset_weights = alg.sample(self._coreset_size)
+        coreset, coreset_weights = alg.sample_orig(self._coreset_size)
         return WeightedPointSet(coreset, coreset_weights)
 
-    def _add_leftovers(self, points):
+    def _add_leftovers(self, points, weights):
         print "add left overs"
         print points.size
         self._last_leaf.extend(points)
         if len(self._last_leaf) >= self._coreset_size:
-            self._add_leaf(self._last_leaf[:self._coreset_size])
+            # if weights is None:
+            #     weights = np.ones_like(self._last_leaf[:self._coreset_size])
+            self._add_leaf(self._last_leaf[:self._coreset_size], weights[:self._coreset_size])
             self._last_leaf = self._last_leaf[self._coreset_size:]
 
     @staticmethod

@@ -5,6 +5,7 @@ import csv
 
 import numpy as np
 import scipy.sparse as sps
+import os.path
 
 
 def process_chunk(chuck):
@@ -79,31 +80,34 @@ class createDB:
             for row in array:
                 writer.writerow(row)
 
-    def read_from_csv(self, file_name, chunksize):
+    def read_from_csv(self, path, file_name, chunksize):
         """
         The purpose of this method is to read from a given file and create an array from it
         The method reads chunk by chunk from a CSV file and process it
+        :param path: given path to file name
         :param chunksize: given size of chunk to read from CSV
         :param file_name: given file name to read from
         """
-        reader = csv.reader(open(file_name, 'rb'))
-        # chunk = np.array([])
-        chunk = None
-        for i, line in enumerate(reader):
-            if i % chunksize == 0 and i > 0:
+        with open(os.path.join(path, file_name), 'rb') as file:
+            print "Start reading from %s" , file_name
+            reader = csv.reader(file)
+            # chunk = np.array([])
+            chunk = None
+            for i, line in enumerate(reader):
+                if i % chunksize == 0 and i > 0:
+                    self._processChunkMethod(chunk)
+                    # del chunk[:]
+                    chunk = None
+                if chunk is None:
+                    l = []
+                    for v in line:
+                        l.append(float(v))
+                    chunk = np.asanyarray(l)
+                else:
+                    chunk = np.vstack([chunk, np.asanyarray(line)])
+            if chunk is not None:
                 self._processChunkMethod(chunk)
-                # del chunk[:]
-                chunk = None
-            if chunk is None:
-                l = []
-                for v in line:
-                    l.append(float(v))
-                chunk = np.asanyarray(l)
-            else:
-                chunk = np.vstack([chunk, np.asanyarray(line)])
-        if chunk is not None:
-            self._processChunkMethod(chunk)
-
+        print "Start reading from %s", file_name
 
 # c = createDB(process_chunk)
 # c.create_matrix(5000, 5)
