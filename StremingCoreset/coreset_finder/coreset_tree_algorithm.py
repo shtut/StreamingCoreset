@@ -6,7 +6,7 @@ The root holds the best representation of all the leaves: the core-set.
 Has a configurable merging algorithm - 'CORESET-ALGORITHM'.
 """
 
-from scipy import sparse
+
 from collections import namedtuple
 import numpy as np
 from stack import Stack
@@ -24,7 +24,7 @@ class CoresetTeeAlgorithm(object):
         :param coreset_size: the required size of the coreset (and nodes)
         """
         self._coreset_alg = coreset_alg
-        self._last_leaf = []
+        self._last_leaf = WeightedPointSet([], [])
         self._coreset_size = coreset_size
         self._data = Stack()
 
@@ -106,14 +106,18 @@ class CoresetTeeAlgorithm(object):
         return WeightedPointSet(coreset, coreset_weights)
 
     def _add_leftovers(self, points, weights):
-        print "add left overs"
-        print points.size
-        self._last_leaf.extend(points)
-        if len(self._last_leaf) >= self._coreset_size:
-            # if weights is None:
-            #     weights = np.ones_like(self._last_leaf[:self._coreset_size])
-            self._add_leaf(self._last_leaf[:self._coreset_size], weights[:self._coreset_size])
-            self._last_leaf = self._last_leaf[self._coreset_size:]
+        # print "adding leftovers:"
+        # print len(self._last_leaf.points)
+        # print len(self._last_leaf.weights)
+        self._last_leaf.points.extend(points)
+        self._last_leaf.weights.extend(weights)
+
+        #if last_leaf contains enough data to become a full sized leaf
+        if len(self._last_leaf.points) >= self._coreset_size:
+            #create a leaf from it that is coreset_size
+            self._add_leaf(self._last_leaf.points[:self._coreset_size], self._last_leaf.weights[:self._coreset_size])
+            #remove coreset_size of data from the last leaf
+            self._last_leaf = WeightedPointSet(self._last_leaf.points[self._coreset_size:] , self._last_leaf.weights[self._coreset_size:])
 
     @staticmethod
     def _print_tree_data(current_data):
