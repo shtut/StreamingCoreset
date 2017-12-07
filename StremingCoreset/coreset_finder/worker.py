@@ -12,24 +12,16 @@ import connection_data as conn
 import message_codes as codes
 from connection import Connection
 from message import Message
-from simple_coreset import SimpleCoreset
 from coreset_tree_algorithm import CoresetTeeAlgorithm
-
+from simple_coreset import SimpleCoreset
+import configuration as cfg
 log.basicConfig(filename='worker.log', level=log.DEBUG)
-MAX_RANDOM_NUMBER = 2000
-CORESET_SIZE = 2
-CORSET_ALGORITHM = SimpleCoreset.coreset_alg
-
-
-# CORSET_ALGORITHM = adiel.LineKMeans.coreset_alg
 
 
 class Worker(object):
-    def __init__(self, server):
-        number = 0
+    def __init__(self, server, leaf_size):
         self._server = server
-        self._coresetTreeBuilder = CoresetTeeAlgorithm(CORSET_ALGORITHM, CORESET_SIZE)
-        self._init_number(number)
+        self._coresetTreeBuilder = CoresetTeeAlgorithm(SimpleCoreset.coreset_alg, leaf_size)
 
     def register_and_handle(self):
         """
@@ -103,9 +95,3 @@ class Worker(object):
         # log.debug("Sending the summary to the server %s" % summary)
         server_connection.send_message(Message(codes.SENDING, summary))
         print "Summary sent to the server. Going back to the loop."
-
-    def _init_number(self, number):
-        if number != 0:
-            self._number = number
-        else:
-            self._number = rand.randint(1, MAX_RANDOM_NUMBER)

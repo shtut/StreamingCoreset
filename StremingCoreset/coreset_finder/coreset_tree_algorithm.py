@@ -11,6 +11,7 @@ from collections import namedtuple
 import numpy as np
 from stack import Stack
 import array_util as utils
+import configuration as cfg
 
 StackItem = namedtuple("StackItem", "coreset level")
 WeightedPointSet = namedtuple("WeightedPointSet", "points weights")
@@ -48,9 +49,11 @@ class CoresetTeeAlgorithm(object):
 
         for p,w in zip(split_points,split_weights):
             if len(p) == self._coreset_size:
-                print "split pts and weights:"
-                print p
-                print w
+                # debugging prints
+                if(cfg.DEBUG):
+                    print "split pts and weights:"
+                    print p
+                    print w
                 self._add_leaf(p, w)
             else:
                 self._add_leftovers(p, w)
@@ -64,7 +67,8 @@ class CoresetTeeAlgorithm(object):
         res = None
         weights = None
         solution = None
-        self._print_tree_data(current_data)
+        if(cfg.DEBUG):
+            self._print_tree_data(current_data)
 
         solution = self._merge_solution(current_data, solution)
 

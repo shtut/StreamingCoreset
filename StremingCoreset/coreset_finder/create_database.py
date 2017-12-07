@@ -6,10 +6,12 @@ import csv
 import numpy as np
 import scipy.sparse as sps
 import os.path
+import configuration as cfg
 
 
 def process_chunk(chuck):
-    print len(chuck)
+    if(cfg.DEBUG):
+        print len(chuck)
     # do something useful ...
 
 

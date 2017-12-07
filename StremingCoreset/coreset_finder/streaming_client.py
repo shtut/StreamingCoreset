@@ -11,6 +11,8 @@ from create_database import createDB
 from connection import Connection
 from message import Message
 import os
+import configuration as cfg
+import threading
 
 
 def _print_server_response_code(code):
@@ -32,13 +34,27 @@ class Client:
         starts the client. creates a database and sends it to the server,  then asks for the summary (coreset)
         :return:
         """
+#async?
+        # self._connect_server()
+        # t = threading.Thread(target=self.parse_and_send_data,args=(path,))
+        # t.start()
+        # #self.get_summary_points()
+
+###not async (original)
         self._connect_server()
         db = createDB(self._process_chunk)
         csv_files = self.find_csv_filenames(path)
         for file in csv_files:
-            db.read_from_csv(path, file, 100)
+            db.read_from_csv(path, file, cfg.CSV_READ_SIZE)
         time.sleep(1)
         self.get_summary_points()
+
+    def parse_and_send_data(self,path):
+        db = createDB(self._process_chunk)
+        csv_files = self.find_csv_filenames(path)
+        for file in csv_files:
+            time.sleep(10)
+            db.read_from_csv(path, file, cfg.CSV_READ_SIZE)
 
     def find_csv_filenames(self, path, suffix=".csv"):
         """
@@ -52,6 +68,10 @@ class Client:
         # sort file on creation time
         fileNames.sort(key=lambda x: os.stat(os.path.join(path, x)).st_ctime )
         return [filename for filename in fileNames if filename.endswith(suffix)]
+
+    def get_summary_points_param(self,a,b):
+        print "got here- it's weird"
+        self.get_summary_points(self)
 
     def get_summary_points(self):
         """

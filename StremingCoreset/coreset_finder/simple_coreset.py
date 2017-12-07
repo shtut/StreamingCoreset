@@ -6,6 +6,7 @@ Contains a simple coreset algorithm - return a random portion of the data in siz
 import random
 import numpy as np
 from AdielCoresetDense import adielCoresetDense as ACD1
+import configuration as cfg
 
 
 class SimpleCoreset:
@@ -46,14 +47,17 @@ class SimpleCoreset:
         A = ACD1(self._points)
         curr_points = self._points
         curr_weights = self._weights
-        print "sample_orig points:"
-        print curr_points
-        print curr_weights
+        if(cfg.DEBUG):
+            print "sample_orig points:"
+            print curr_points
+            print curr_weights
         #curr_weights=np.ravel(curr_weights)
         weighted_points= np.multiply(curr_weights,curr_points.T)
         xx, radiuses , weights , Tags1, new_weights = A.k_means_clustering(weighted_points.T, curr_weights, coreSetSize, is_sparse=1, is_plspls=0,
                                                       is_klinemeans=0)
-        print new_weights
+        if (cfg.DEBUG):
+            print new_weights
+
         x= curr_points[Tags1, :]
         # x,w,ind = A.CNW(A._points, coreSetSize)
         # e,x=A.Nonuniform_Mahuni(A._points, coreSetSize)

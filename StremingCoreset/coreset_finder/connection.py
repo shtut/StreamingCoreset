@@ -6,8 +6,7 @@ import socket
 import array_util as arr_util
 import message_codes as codes
 from message import Message
-
-PACKET_SIZE = 2
+import configuration as cfg
 
 
 class Connection(object):
@@ -60,7 +59,7 @@ class Connection(object):
         :return:
         """
         serialized, size = self._serialize_data(message)
-        packets = arr_util.array_split(serialized, PACKET_SIZE)
+        packets = arr_util.array_split(serialized, cfg.PACKET_SIZE)
         self._socket.send(self._size_in_bytes(packets))
         for idx, packet in enumerate(packets):
             self._socket.send(self._size_in_bytes(packet))

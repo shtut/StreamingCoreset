@@ -14,6 +14,8 @@ from summary_worker import SummaryWorker
 import connection_data as conn
 from server import Server
 from worker import Worker
+import signal
+import configuration as cfg
 
 
 class WorkManager:
@@ -51,17 +53,18 @@ class WorkManager:
     def _run_client():
         path = 'C:\Users\Hadas\Dropbox\coreset_finder_weights\coreset_finder\iterable'
         client = Client(conn.server_ip)
+        signal.signal(signal.SIGBREAK, client.get_summary_points_param)
         client.run_client(path)
 
     @staticmethod
     def _start_summary_worker():
-        summary_worker = SummaryWorker(conn.server_ip)
+        summary_worker = SummaryWorker(conn.server_ip, cfg.CORESET_SIZE)
         Thread(target=summary_worker.register_and_handle).start()
         time.sleep(1)
 
     def _start_workers(self):
         for i in xrange(self.number_of_workers):
-            worker = Worker(conn.server_ip)
+            worker = Worker(conn.server_ip, cfg.LEAF_SIZE)
             Thread(target=worker.register_and_handle).start()
             time.sleep(1)
 
@@ -80,7 +83,7 @@ def kill_process(process_name):
 
 try:
     if __name__ == '__main__':
-        manager = WorkManager(2)
+        manager = WorkManager(cfg.NUMBER_OF_WORKERS)
         manager.main()
         # time.sleep(3 * manager.number_of_workers)
         kill_process("python.exe")

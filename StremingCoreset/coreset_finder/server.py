@@ -16,12 +16,12 @@ import connection_data as conn
 import message_codes as codes
 from connection_listener import ConnectionListener
 from message import Message
+import configuration as cfg
 
 log.basicConfig(filename='server.log', level=log.DEBUG)
 
 
 class Server(object):
-    CHUNK_SIZE = 2
 
     def __init__(self, server_name):
         # self._received_weights = []
@@ -167,7 +167,7 @@ class Server(object):
 
     def _forward_points_to_workers(self, data):
         print "Forwarding points to workers"
-        for split in utils.array_split(data, self.CHUNK_SIZE):
+        for split in utils.array_split(data, cfg.WORKER_CHUNK_SIZE):
             self._send_to_worker(split)
 
     def get_summary_from_workers(self, client_connection):
@@ -222,8 +222,12 @@ class Server(object):
         # wait for summary points
         self._wait_for_results(1)
 
-        summary_points = np.vstack(self._received_points[0].points)
-        summary_weights = np.hstack(self._received_points[0].weights)
+        if(self._received_points[0].points is not None):
+            summary_points = np.vstack(self._received_points[0].points)
+            summary_weights = np.hstack(self._received_points[0].weights)
+        # else:
+        #     summary_points = []
+        #     summary_weights = []
         print "server:"
         print self._received_points[0]
         client_connection.send_message(Message(codes.SENDING, summary_points , summary_weights))
