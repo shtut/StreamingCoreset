@@ -7,7 +7,7 @@ import sys
 #starts up the worker
 try:
     if __name__ == '__main__':
-        worker = Worker(sys.argv[1])
+        worker = Worker(sys.argv[1] , sys.argv[2])
         worker.register_and_handle()
 except KeyboardInterrupt:
     print "caught SIGINT, dying."

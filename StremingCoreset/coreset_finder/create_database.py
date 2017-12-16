@@ -91,7 +91,7 @@ class createDB:
         :param file_name: given file name to read from
         """
         with open(os.path.join(path, file_name), 'rb') as file:
-            print "Start reading from %s" , file_name
+            print "Start reading from %s" %(file_name)
             reader = csv.reader(file)
             # chunk = np.array([])
             chunk = None
@@ -109,7 +109,7 @@ class createDB:
                     chunk = np.vstack([chunk, np.asanyarray(line)])
             if chunk is not None:
                 self._processChunkMethod(chunk)
-        print "Start reading from %s", file_name
+        print "Start reading from %s"  %(file_name)
 
 # c = createDB(process_chunk)
 # c.create_matrix(5000, 5)
