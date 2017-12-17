@@ -19,8 +19,9 @@ import configuration as cfg
 
 
 class WorkManager:
-    def __init__(self, workers_num):
+    def __init__(self, workers_num, coreset_sizes):
         self._workers_num = workers_num
+        self._coreset_sizes = coreset_sizes
         pass
 
     @property
@@ -40,7 +41,7 @@ class WorkManager:
         self._run_server()
         time.sleep(1)
         self._start_workers()
-        self._start_summary_worker()
+        self._start_summary_workers()
         self._run_client()
 
     @staticmethod
@@ -51,16 +52,16 @@ class WorkManager:
 
     @staticmethod
     def _run_client():
-        path = 'C:\Users\Hadas\Dropbox\coreset_finder_weights\coreset_finder\iterable'
+        path = 'D:\Users\Hadas\Documents\GitHub\StreamingCoreset\StremingCoreset\coreset_finder\iterable'
         client = Client(conn.server_ip)
-        signal.signal(signal.SIGBREAK, client.get_summary_points_param)
+        #signal.signal(signal.SIGBREAK, client.get_summary_points_param)
         client.run_client(path)
 
-    @staticmethod
-    def _start_summary_worker():
-        summary_worker = SummaryWorker(conn.server_ip, cfg.CORESET_SIZE)
-        Thread(target=summary_worker.register_and_handle).start()
-        time.sleep(1)
+    def _start_summary_workers(self):
+        for coreset in self._coreset_sizes:
+            summary_worker = SummaryWorker(conn.server_ip, coreset)
+            Thread(target=summary_worker.register_and_handle).start()
+            time.sleep(1)
 
     def _start_workers(self):
         for i in xrange(self.number_of_workers):
@@ -83,7 +84,7 @@ def kill_process(process_name):
 
 try:
     if __name__ == '__main__':
-        manager = WorkManager(cfg.NUMBER_OF_WORKERS)
+        manager = WorkManager(cfg.NUMBER_OF_WORKERS, cfg.CORESET_SIZE)
         manager.main()
         # time.sleep(3 * manager.number_of_workers)
         kill_process("python.exe")

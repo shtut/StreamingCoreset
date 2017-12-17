@@ -27,7 +27,7 @@ class Server(object):
         # self._received_weights = []
         self._server_name = server_name
         self._registered_workers = []
-        self._summary_worker = None
+        self._summary_workers = []
         self._current_load = PriorityQueue()
         self._received_points = []
 
@@ -78,7 +78,7 @@ class Server(object):
             self._start_worker_thread(connection)
             print "Registering worker: ", (connection._socket, connection._address)
         elif command == codes.REGISTER_SUMMARY_WORKER:
-            self._summary_worker = connection
+            self._summary_workers.append(connection)
             self._start_worker_thread(connection)
             print "Registering summary worker: ", (connection._socket, connection._address)
         else:
@@ -208,32 +208,26 @@ class Server(object):
             else:
                 points = np.vstack((points, pts.points))
                 weights = np.hstack((weights, pts.weights))
-        # points = np.vstack(self._received_points[0].points)
-        # weights = np.vstack(self._received_points[0].weights)
 
         # clearing received data cache
         self._received_points = []
-        # self._received_weights = []
 
-        # sending all 'final results' to summary worker
-        self._send_data_to_worker(points, self._summary_worker , weights)
-        self._summary_worker.send_message(Message(codes.GET_UNIFIED))
+        #looping over the summary workers
+        for summary_worker in self._summary_workers:
+            summary_points, summary_weights = self._generate_summary_worker_coreset(summary_worker, points, weights)
+            client_connection.send_message(Message(codes.SENDING, summary_points, summary_weights))
+            del self._received_points[:]
 
-        # wait for summary points
+    def _generate_summary_worker_coreset(self, summary_worker, points, weights):
+        self._send_data_to_worker(points, summary_worker, weights)
+        summary_worker.send_message(Message(codes.GET_UNIFIED))
         self._wait_for_results(1)
 
         if(self._received_points[0].points is not None):
             summary_points = np.vstack(self._received_points[0].points)
             summary_weights = np.hstack(self._received_points[0].weights)
-        # else:
-        #     summary_points = []
-        #     summary_weights = []
-        print "server:"
-        print self._received_points[0]
-        client_connection.send_message(Message(codes.SENDING, summary_points , summary_weights))
 
-        del self._received_points[:]
-        # del self._received_weights[:]
+        return summary_points, summary_weights
 
     def _obtain_workers_results(self):
         self._request_workers_results()
@@ -247,6 +241,6 @@ class Server(object):
         need = len(self._registered_workers)
         self._wait_for_results(need)
 
-    def _wait_for_results(self, need):
+    def _wait_for_results(self,need):
         while len(self._received_points) < need:
             time.sleep(1)

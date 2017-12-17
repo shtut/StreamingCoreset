@@ -4,6 +4,7 @@ It generates the data and streams it to the server, then requests the summary.
 """
 
 import time
+from datetime import datetime
 import array_util
 import connection_data as conn
 import message_codes as codes
@@ -34,13 +35,6 @@ class Client:
         starts the client. creates a database and sends it to the server,  then asks for the summary (coreset)
         :return:
         """
-#async?
-        # self._connect_server()
-        # t = threading.Thread(target=self.parse_and_send_data,args=(path,))
-        # t.start()
-        # #self.get_summary_points()
-
-###not async (original)
         self._connect_server()
         db = createDB(self._process_chunk)
         csv_files = self.find_csv_filenames(path)
@@ -69,24 +63,30 @@ class Client:
         fileNames.sort(key=lambda x: os.stat(os.path.join(path, x)).st_ctime )
         return [filename for filename in fileNames if filename.endswith(suffix)]
 
-    def get_summary_points_param(self,a,b):
-        print "got here- it's weird"
-        self.get_summary_points(self)
-
     def get_summary_points(self):
         """
             requests and handles the summary (coreset) from the server
         :return:
         """
+
         print "Getting the summary..."
         self._connection.send_message(Message(codes.GET_UNIFIED))
-        message = self._connection.receive_message()
-        data = [message.points, message.weights]
-        print "Received the summary:\n"
-        print "Points:\n %s" % data[0]
-        print "Weights:\n %s" % data[1]
-        db = createDB(self._process_chunk)
-        db.write_matrix_to_csv('dielout.csv', data)
+
+        for summary in cfg.CORESET_SIZE:
+            start = datetime.now()
+            message = self._connection.receive_message()
+            data = [message.points, message.weights]
+            print "Received the summary of size ",summary
+            print "Points:\n %s" % data[0]
+            print "Weights:\n %s" % data[1]
+            end = datetime.now()
+            total = end - start
+
+            db = createDB(self._process_chunk)
+            file_name = "coreset_size_{0}_total_time_{1}".format(summary,total.total_seconds())
+            print file_name
+            #file_name = "coreset_size_%s_output_start %s.%s.%s.%s end %s.%s.%s.%s total %s" % (summary, start.hour,start.minute, start.second, start.microsecond, end.hour,end.minute, end.second, end.microsecond, total.total_seconds())
+            db.write_matrix_to_csv(file_name + ".csv", data)
 
     def _connect_server(self):
         """
