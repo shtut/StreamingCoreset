@@ -35,6 +35,7 @@ class Client:
         starts the client. creates a database and sends it to the server,  then asks for the summary (coreset)
         :return:
         """
+        self._total_start = datetime.now()
         self._connect_server()
         db = createDB(self._process_chunk)
         csv_files = self.find_csv_filenames(path)
@@ -73,17 +74,18 @@ class Client:
         self._connection.send_message(Message(codes.GET_UNIFIED))
 
         for summary in cfg.CORESET_SIZE:
-            start = datetime.now()
+            summary_start = datetime.now()
             message = self._connection.receive_message()
             data = [message.points, message.weights]
             print "Received the summary of size ",summary
             print "Points:\n %s" % data[0]
             print "Weights:\n %s" % data[1]
             end = datetime.now()
-            total = end - start
+            total_summary = end - summary_start
+            total_time = end - self._total_start
 
             db = createDB(self._process_chunk)
-            file_name = "coreset_size_{0}_total_time_{1}".format(summary,total.total_seconds())
+            file_name = "coreset_size_{0}_total_time_{1}sec_summary_time_{2}sec".format(summary,total_time.total_seconds(),total_summary.total_seconds())
             print file_name
             #file_name = "coreset_size_%s_output_start %s.%s.%s.%s end %s.%s.%s.%s total %s" % (summary, start.hour,start.minute, start.second, start.microsecond, end.hour,end.minute, end.second, end.microsecond, total.total_seconds())
             db.write_matrix_to_csv(file_name + ".csv", data)
