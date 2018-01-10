@@ -17,7 +17,8 @@ try:
         # for the same PC with threads
         for coreset in cfg.CORESET_SIZE:
             summary_worker = SummaryWorker(sys.argv[1], coreset)
-            Thread(target=summary_worker.register_and_handle).start()
+            # Thread(target=summary_worker.register_and_handle).start()
+            summary_worker.register_and_handle()
             time.sleep(1)
 
 except KeyboardInterrupt:

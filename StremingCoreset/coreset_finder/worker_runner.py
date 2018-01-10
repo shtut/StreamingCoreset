@@ -18,7 +18,8 @@ try:
         # for the same PC with threads
         for i in xrange(cfg.NUMBER_OF_WORKERS):
             worker = Worker(sys.argv[1], cfg.LEAF_SIZE)
-            Thread(target=worker.register_and_handle).start()
+            # Thread(target=worker.register_and_handle).start()
+            worker.register_and_handle()
             time.sleep(1)
 except KeyboardInterrupt:
     print "caught SIGINT, dying."

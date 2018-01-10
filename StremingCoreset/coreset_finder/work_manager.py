@@ -8,14 +8,15 @@ Then it asks for the summary which the server provides, and exits.
 import sys
 import time
 from threading import Thread
+
 import psutil
-from streaming_client import Client
-from summary_worker import SummaryWorker
+import os
+import configuration as cfg
 import connection_data as conn
 from server import Server
+from streaming_client import Client
+from summary_worker import SummaryWorker
 from worker import Worker
-import signal
-import configuration as cfg
 
 
 class WorkManager:
@@ -52,7 +53,9 @@ class WorkManager:
 
     @staticmethod
     def _run_client():
-        path = 'D:\Users\Hadas\Documents\GitHub\StreamingCoreset\StremingCoreset\coreset_finder\iterable'
+        dir = os.path.dirname(os.path.abspath(__file__))
+        path = os.path.join(dir + os.sep, 'db_files')
+        #path = 'D:\GitHub\StremingCoreset\StremingCoreset\coreset_finder\db_files'
         client = Client(conn.server_ip)
         #signal.signal(signal.SIGBREAK, client.get_summary_points_param)
         client.run_client(path)
